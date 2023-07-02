@@ -12,6 +12,8 @@ group = "com.udomomo"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
+val exposedVersion: String by project
+
 repositories {
     mavenCentral()
 }
@@ -24,6 +26,12 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(platform("software.amazon.awssdk:bom:2.20.76"))
     implementation("software.amazon.awssdk:s3")
+
+    dependencies {
+        implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+        implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+        implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    }
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
