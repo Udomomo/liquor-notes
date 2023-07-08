@@ -4,7 +4,7 @@ create table if not exists users (
     password varchar(50) not null,
     email varchar(100) unique not null,
     created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp
 );
 
 create table if not exists reviews (
@@ -14,14 +14,14 @@ create table if not exists reviews (
     content varchar(1000),
     stars decimal not null,
     created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp
 );
 
 create table if not exists tags (
     id bigint primary key,
     name varchar(50) not null,
     created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp
 );
 
 create table if not exists review_tags (
@@ -30,4 +30,6 @@ create table if not exists review_tags (
     tag_id bigint not null,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp,
-) index idx_review_tags_review_id (review_id), index idx_review_tags_tag_id (tag_id);
+    index idx_review_tags_review_id (review_id),
+    index idx_review_tags_tag_id (tag_id)
+);
