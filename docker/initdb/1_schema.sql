@@ -24,7 +24,7 @@ create table if not exists tags (
     updated_at timestamp default current_timestamp
 );
 
-create table if not exists review_tags (
+create table if not exists review_tag_mappings (
     id varchar(24) primary key,
     review_id bigint not null,
     tag_id bigint not null,
