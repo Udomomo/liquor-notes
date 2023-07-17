@@ -21,7 +21,8 @@ create table if not exists tags (
     id varchar(26) primary key,
     name varchar(50) not null,
     created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp
+    updated_at timestamp default current_timestamp,
+    index idx_tags_name (name)
 );
 
 create table if not exists review_tag_mappings (
@@ -30,6 +31,6 @@ create table if not exists review_tag_mappings (
     tag_id varchar(26) not null,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp,
-    index idx_review_tags_review_id (review_id),
-    index idx_review_tags_tag_id (tag_id)
+    index idx_review_tag_mappings_review_id (review_id),
+    index idx_review_tag_mappings_tag_id (tag_id)
 );
