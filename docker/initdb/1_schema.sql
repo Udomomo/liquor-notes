@@ -12,7 +12,7 @@ create table if not exists reviews (
     user_id varchar(26) not null,
     title varchar(100) not null,
     content varchar(1000),
-    stars decimal not null,
+    star decimal not null,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp
 );

@@ -10,5 +10,5 @@ abstract class StringEntity(id: EntityID<String>) : Entity<String>(id)
 abstract class StringEntityClass<out E : StringEntity>(
     table: IdTable<String>,
     entityType: Class<E>? = null,
-    entityCtor: ((EntityID<String>) -> E)? = null
+    entityCtor: ((EntityID<String>) -> E)? = null,
 ) : EntityClass<String, E>(table, entityType, entityCtor)

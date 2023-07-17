@@ -4,7 +4,9 @@ import de.huxhorn.sulky.ulid.ULID
 
 object IdFactory {
     private val ulid = ULID()
-    fun generate(): String {
-        return ulid.nextULID()
+    fun generate(): Id {
+        return Id(ulid.nextULID())
     }
 }
+
+data class Id(val value: String)
