@@ -16,7 +16,7 @@ class ReviewTest {
         val star = Star.of(5.0)
 
         // Do
-        val review = Review.of(id, userId, title, content, star, listOf(Tag.of("tag01"), Tag.of("tag02")))
+        val review = Review.of(id, userId, title, content, star, listOf(Id("tag01"), Id("tag02")))
 
         // Verify
         assertEquals(title, review.title)
@@ -40,7 +40,7 @@ class ReviewTest {
                     title,
                     content,
                     star,
-                    listOf(Tag.of("tag01"), Tag.of("tag02")),
+                    listOf(Id("tag01"), Id("tag02")),
                 )
             }
 
@@ -66,7 +66,7 @@ class ReviewTest {
                     title,
                     content,
                     star,
-                    listOf(Tag.of("tag01"), Tag.of("tag02")),
+                    listOf(Id("tag01"), Id("tag02")),
                 )
             }
 
@@ -82,7 +82,7 @@ class ReviewTest {
         val title = "title".repeat(20)
         val content = "contents".repeat(125)
         val star = Star.of(5.0)
-        val tags = (1..11).map { Tag.of("tag$it") }
+        val tags = (1..11).map { Id("tag$it") }
 
         // Do
         val error = assertThrows<IllegalArgumentException> { Review.of(id, userId, title, content, star, tags) }
