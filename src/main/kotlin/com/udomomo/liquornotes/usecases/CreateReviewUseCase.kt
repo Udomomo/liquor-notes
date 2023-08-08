@@ -7,6 +7,7 @@ import com.udomomo.liquornotes.domains.Tag
 import com.udomomo.liquornotes.domains.TagRepository
 import com.udomomo.liquornotes.ids.Id
 import com.udomomo.liquornotes.ids.IdFactory
+import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 data class CreateReviewRequest(
@@ -22,6 +23,7 @@ data class TagRequest(
     val name: String,
 )
 
+@Service
 @Transactional
 class CreateReviewUseCase(
     private val reviewRepository: ReviewRepository,
