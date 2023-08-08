@@ -1,8 +1,10 @@
 package com.udomomo.liquornotes.domains
 
-import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface TagRepository: JpaRepository<Tag, String> {
+interface TagRepository {
+    fun findByNames(names: List<String>): List<Tag>
+
+    fun save(tags: List<Tag>)
 }
