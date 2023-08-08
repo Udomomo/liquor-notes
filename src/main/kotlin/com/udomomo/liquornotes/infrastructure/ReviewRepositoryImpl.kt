@@ -5,10 +5,7 @@ import com.udomomo.liquornotes.domains.ReviewRepository
 import com.udomomo.liquornotes.ids.Id
 import com.udomomo.liquornotes.infrastructure.entities.ReviewEntity
 import com.udomomo.liquornotes.infrastructure.entities.ReviewTagMappingTable
-import com.udomomo.liquornotes.infrastructure.entities.TagEntity
-import com.udomomo.liquornotes.infrastructure.entities.TagTable
 import org.jetbrains.exposed.sql.batchInsert
-import org.jetbrains.exposed.sql.insertIgnore
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
