@@ -2,17 +2,29 @@ package com.udomomo.liquornotes.controllers
 
 import com.udomomo.liquornotes.usecases.CreateReviewRequest
 import com.udomomo.liquornotes.usecases.CreateReviewUseCase
+import com.udomomo.liquornotes.usecases.ListReviewsUseCase
 import com.udomomo.liquornotes.usecases.TagRequest
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ReviewRestController(private val createReviewUseCase: CreateReviewUseCase) {
+class ReviewRestController(
+    private val listReviewsUseCase: ListReviewsUseCase,
+    private val createReviewUseCase: CreateReviewUseCase,
+) {
+    @GetMapping("/reviews/{userId}")
+    fun list(
+        @PathVariable("userId") userId: String,
+    ) {
+    }
+
     @PostMapping("/review")
     fun post(
         @RequestBody @Validated request: PostRequestBody,
