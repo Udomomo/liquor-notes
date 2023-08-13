@@ -1,7 +1,15 @@
 spring.profiles.active: local
 
 ---
-spring.profiles: local
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:mysql://localhost:13306/liquor-notes
+    username: mysql
+    password: mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
 aws:
   s3:
     endpoint: http://localhost:14572

@@ -1,9 +1,7 @@
 package com.udomomo.liquornotes.domains
 
 import com.udomomo.liquornotes.ids.Id
-import org.springframework.stereotype.Repository
 
-@Repository
 interface TagRepository {
     fun listBy(tagIds: List<Id>): List<Tag>
 
