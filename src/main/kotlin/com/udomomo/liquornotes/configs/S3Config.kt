@@ -30,3 +30,5 @@ class S3Config(
         return S3Bucket(s3Client, properties.bucket)
     }
 }
+
+class S3Bucket(val s3Client: S3Client, val bucket: String)
