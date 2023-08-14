@@ -47,6 +47,6 @@ class CreateReviewUseCase(
             tagIds = tagIds,
         )
 
-        reviewRepository.post(review)
+        reviewRepository.save(review)
     }
 }

@@ -14,7 +14,6 @@ import javax.sql.DataSource
 @Configuration
 @EnableTransactionManagement
 class DataTransactionConfig(private val datasource: DataSource) : TransactionManagementConfigurer {
-
     @Bean
     override fun annotationDrivenTransactionManager() = SpringTransactionManager(datasource)
 }

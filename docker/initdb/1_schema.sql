@@ -26,11 +26,9 @@ create table if not exists tags (
 );
 
 create table if not exists review_tag_mappings (
-    id varchar(26) primary key,
     review_id varchar(26) not null,
     tag_id varchar(26) not null,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp,
-    index idx_review_tag_mappings_review_id (review_id),
-    index idx_review_tag_mappings_tag_id (tag_id)
+    primary key(review_id, tag_id)
 );

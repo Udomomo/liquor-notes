@@ -35,7 +35,7 @@ class ReviewRepositoryImpl : ReviewRepository {
         }
     }
 
-    override fun post(review: Review) {
+    override fun save(review: Review) {
         val createdAt = LocalDateTime.now()
         val updatedAt = LocalDateTime.now()
 
@@ -52,6 +52,8 @@ class ReviewRepositoryImpl : ReviewRepository {
         ReviewTagMappingTable.batchInsert(review.tagIds) { tagId ->
             this[ReviewTagMappingTable.reviewId] = review.id.value
             this[ReviewTagMappingTable.tagId] = tagId.value
+            this[ReviewTagMappingTable.createdAt] = createdAt
+            this[ReviewTagMappingTable.updatedAt] = updatedAt
         }
     }
 }
