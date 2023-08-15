@@ -2,8 +2,9 @@ package com.udomomo.liquornotes.controllers
 
 import com.udomomo.liquornotes.usecases.CreateReviewRequest
 import com.udomomo.liquornotes.usecases.CreateReviewUseCase
+import com.udomomo.liquornotes.usecases.CreateTagRequest
 import com.udomomo.liquornotes.usecases.ListReviewsUseCase
-import com.udomomo.liquornotes.usecases.TagRequest
+import com.udomomo.liquornotes.usecases.ReviewResponse
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
@@ -22,7 +23,8 @@ class ReviewRestController(
     @GetMapping("/reviews/{userId}")
     fun list(
         @PathVariable("userId") userId: String,
-    ) {
+    ): List<ReviewResponse> {
+        return listReviewsUseCase.execute(userId)
     }
 
     @PostMapping("/review")
@@ -36,7 +38,7 @@ class ReviewRestController(
                 content = request.content!!,
                 star = request.star,
                 tags = request.tags.map {
-                    TagRequest(
+                    CreateTagRequest(
                         id = it.id,
                         name = it.name!!,
                     )

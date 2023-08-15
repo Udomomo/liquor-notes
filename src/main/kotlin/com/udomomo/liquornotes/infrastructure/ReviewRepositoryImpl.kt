@@ -6,9 +6,9 @@ import com.udomomo.liquornotes.domains.Star
 import com.udomomo.liquornotes.ids.Id
 import com.udomomo.liquornotes.infrastructure.entities.ReviewEntity
 import com.udomomo.liquornotes.infrastructure.entities.ReviewTable
-import com.udomomo.liquornotes.infrastructure.entities.ReviewTagMappingEntity
 import com.udomomo.liquornotes.infrastructure.entities.ReviewTagMappingTable
 import org.jetbrains.exposed.sql.batchInsert
+import org.jetbrains.exposed.sql.select
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
@@ -16,14 +16,14 @@ import java.time.LocalDateTime
 class ReviewRepositoryImpl : ReviewRepository {
     override fun listBy(userId: Id): List<Review> {
         val reviewEntities = ReviewEntity.find { ReviewTable.userId eq userId.value }
-        val reviewTagMappings = ReviewTagMappingEntity.find {
-            ReviewTagMappingTable.reviewId inList reviewEntities.map { it.id.value }
-        }
+        val reviewTagMappings = ReviewTagMappingTable.select {
+            ReviewTagMappingTable.reviewId inList reviewEntities.map { entity -> entity.id.value }
+        }.map { Pair(it[ReviewTagMappingTable.reviewId], it[ReviewTagMappingTable.tagId]) }
 
         return reviewEntities.map { reviewEntity ->
             val tagIds = reviewTagMappings
-                .filter { it.reviewId == reviewEntity.id.value }
-                .map { Id(it.tagId) }
+                .filter { it.first == reviewEntity.id.value }
+                .map { Id(it.second) }
             Review.of(
                 id = Id(reviewEntity.id.value),
                 userId = Id(reviewEntity.userId),

@@ -15,10 +15,10 @@ data class CreateReviewRequest(
     val title: String,
     val content: String,
     val star: Double,
-    val tags: List<TagRequest>,
+    val tags: List<CreateTagRequest>,
 )
 
-data class TagRequest(
+data class CreateTagRequest(
     val id: String?,
     val name: String,
 )
