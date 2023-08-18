@@ -45,7 +45,7 @@ class ReviewTest {
             }
 
         // verify
-        assertEquals("title is too long", error.message)
+        assertEquals("title is too long: $title", error.message)
     }
 
     @Test
@@ -71,7 +71,7 @@ class ReviewTest {
             }
 
         // verify
-        assertEquals("contents is too long", error.message)
+        assertEquals("content is too long: $content", error.message)
     }
 
     @Test
@@ -88,6 +88,23 @@ class ReviewTest {
         val error = assertThrows<IllegalArgumentException> { Review.of(id, userId, title, content, star, tags) }
 
         // verify
-        assertEquals("tag is too many", error.message)
+        assertEquals("tag is too many: $tags", error.message)
+    }
+
+    @Test
+    fun `should fail creating review with same tags`() {
+        // Arrange
+        val id = Id("testId")
+        val userId = Id("testId") // TODO: use mock
+        val title = "title".repeat(20)
+        val content = "contents".repeat(125)
+        val star = Star.of(5.0)
+        val tags = listOf(1, 2, 3, 1).map { Id("tag$it") }
+
+        // Do
+        val error = assertThrows<IllegalArgumentException> { Review.of(id, userId, title, content, star, tags) }
+
+        // verify
+        assertEquals("Multiple same tag exists: $tags", error.message)
     }
 }
