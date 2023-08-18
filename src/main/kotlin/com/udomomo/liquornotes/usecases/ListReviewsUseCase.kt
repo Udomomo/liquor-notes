@@ -1,5 +1,7 @@
 package com.udomomo.liquornotes.usecases
 
+import com.udomomo.liquornotes.controllers.ReviewResponse
+import com.udomomo.liquornotes.controllers.TagResponse
 import com.udomomo.liquornotes.domains.ReviewRepository
 import com.udomomo.liquornotes.domains.TagRepository
 import com.udomomo.liquornotes.ids.Id
@@ -14,7 +16,7 @@ class ListReviewsUseCase(
 ) {
     fun execute(userId: String): List<ReviewResponse> {
         val reviews = reviewRepository.listBy(Id(userId))
-        val tags = tagRepository.listBy(reviews.flatMap { it.tagIds }.distinct())
+        val tags = tagRepository.listBy(reviews.flatMap { it.tagIds })
 
         return reviews.map {
             ReviewResponse(
@@ -33,17 +35,3 @@ class ListReviewsUseCase(
         }
     }
 }
-
-data class ReviewResponse(
-    val id: String,
-    val userId: String,
-    val title: String,
-    val content: String,
-    val star: Double,
-    val tags: List<TagResponse>,
-)
-
-data class TagResponse(
-    val id: String,
-    val name: String,
-)

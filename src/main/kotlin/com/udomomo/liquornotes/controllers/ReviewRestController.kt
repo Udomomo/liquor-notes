@@ -3,8 +3,8 @@ package com.udomomo.liquornotes.controllers
 import com.udomomo.liquornotes.usecases.CreateReviewRequest
 import com.udomomo.liquornotes.usecases.CreateReviewUseCase
 import com.udomomo.liquornotes.usecases.CreateTagRequest
+import com.udomomo.liquornotes.usecases.GetReviewUseCase
 import com.udomomo.liquornotes.usecases.ListReviewsUseCase
-import com.udomomo.liquornotes.usecases.ReviewResponse
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
@@ -18,13 +18,22 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class ReviewRestController(
     private val listReviewsUseCase: ListReviewsUseCase,
+    private val getReviewUseCase: GetReviewUseCase,
     private val createReviewUseCase: CreateReviewUseCase,
 ) {
-    @GetMapping("/reviews/{userId}")
+    @GetMapping("{userId}/reviews")
     fun list(
         @PathVariable("userId") userId: String,
     ): List<ReviewResponse> {
         return listReviewsUseCase.execute(userId)
+    }
+
+    @GetMapping("{userId}/review/{reviewId}")
+    fun get(
+        @PathVariable("userId") userId: String,
+        @PathVariable("reviewId") reviewId: String,
+    ): ReviewResponse? {
+        return getReviewUseCase.execute(userId, reviewId)
     }
 
     @PostMapping("/review")
@@ -72,4 +81,18 @@ data class TagRequestBody(
     @NotBlank
     @Size(max = 50)
     val name: String?,
+)
+
+data class ReviewResponse(
+    val id: String,
+    val userId: String,
+    val title: String,
+    val content: String,
+    val star: Double,
+    val tags: List<TagResponse>,
+)
+
+data class TagResponse(
+    val id: String,
+    val name: String,
 )

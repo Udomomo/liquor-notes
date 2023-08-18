@@ -7,6 +7,7 @@ import com.udomomo.liquornotes.ids.Id
 import com.udomomo.liquornotes.infrastructure.entities.ReviewEntity
 import com.udomomo.liquornotes.infrastructure.entities.ReviewTable
 import com.udomomo.liquornotes.infrastructure.entities.ReviewTagMappingTable
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.select
 import org.springframework.stereotype.Repository
@@ -16,6 +17,8 @@ import java.time.LocalDateTime
 class ReviewRepositoryImpl : ReviewRepository {
     override fun listBy(userId: Id): List<Review> {
         val reviewEntities = ReviewEntity.find { ReviewTable.userId eq userId.value }
+        if (reviewEntities.count() == 0L) return emptyList()
+
         val reviewTagMappings = ReviewTagMappingTable.select {
             ReviewTagMappingTable.reviewId inList reviewEntities.map { entity -> entity.id.value }
         }.map { Pair(it[ReviewTagMappingTable.reviewId], it[ReviewTagMappingTable.tagId]) }
@@ -33,6 +36,30 @@ class ReviewRepositoryImpl : ReviewRepository {
                 tagIds = tagIds,
             )
         }
+    }
+
+    override fun findBy(userId: Id, reviewId: Id): Review? {
+        val reviewEntity = ReviewEntity
+            .find { ReviewTable.userId eq userId.value and(ReviewTable.id eq reviewId.value) }
+            .singleOrNull()
+            ?: return null
+
+        val reviewTagMappings = ReviewTagMappingTable
+            .select { ReviewTagMappingTable.reviewId eq reviewEntity.id.value }
+            .map { Pair(it[ReviewTagMappingTable.reviewId], it[ReviewTagMappingTable.tagId]) }
+
+        val tagIds = reviewTagMappings
+            .filter { it.first == reviewEntity.id.value }
+            .map { Id(it.second) }
+
+        return Review.of(
+            id = Id(reviewEntity.id.value),
+            userId = Id(reviewEntity.userId),
+            title = reviewEntity.title,
+            content = reviewEntity.content,
+            star = Star.of(reviewEntity.star),
+            tagIds = tagIds,
+        )
     }
 
     override fun save(review: Review) {

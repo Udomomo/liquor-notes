@@ -22,8 +22,9 @@ class Review private constructor(
             if (title.length > 100) throw IllegalArgumentException("title is too long: $title")
             if (content.length > 1000) throw IllegalArgumentException("content is too long: $content")
             if (tagIds.size > 10) throw IllegalArgumentException("tag is too many: $tagIds")
-            if (tagIds.size != tagIds.distinct().size)
+            if (tagIds.size != tagIds.distinct().size) {
                 throw IllegalArgumentException("Multiple same tag exists: $tagIds")
+            }
 
             return Review(id, userId, title, content, star, tagIds)
         }
