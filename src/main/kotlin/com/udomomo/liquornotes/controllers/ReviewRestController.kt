@@ -3,7 +3,9 @@ package com.udomomo.liquornotes.controllers
 import com.udomomo.liquornotes.usecases.CreateReviewRequest
 import com.udomomo.liquornotes.usecases.CreateReviewUseCase
 import com.udomomo.liquornotes.usecases.CreateTagRequest
+import com.udomomo.liquornotes.usecases.GetReviewResponse
 import com.udomomo.liquornotes.usecases.GetReviewUseCase
+import com.udomomo.liquornotes.usecases.ListReviewResponse
 import com.udomomo.liquornotes.usecases.ListReviewsUseCase
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -24,7 +26,7 @@ class ReviewRestController(
     @GetMapping("{userId}/reviews")
     fun list(
         @PathVariable("userId") userId: String,
-    ): List<ReviewResponse> {
+    ): List<ListReviewResponse> {
         return listReviewsUseCase.execute(userId)
     }
 
@@ -32,7 +34,7 @@ class ReviewRestController(
     fun get(
         @PathVariable("userId") userId: String,
         @PathVariable("reviewId") reviewId: String,
-    ): ReviewResponse? {
+    ): GetReviewResponse? {
         return getReviewUseCase.execute(userId, reviewId)
     }
 
@@ -81,18 +83,4 @@ data class TagRequestBody(
     @NotBlank
     @Size(max = 50)
     val name: String?,
-)
-
-data class ReviewResponse(
-    val id: String,
-    val userId: String,
-    val title: String,
-    val content: String,
-    val star: Double,
-    val tags: List<TagResponse>,
-)
-
-data class TagResponse(
-    val id: String,
-    val name: String,
 )

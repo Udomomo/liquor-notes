@@ -1,12 +1,24 @@
 package com.udomomo.liquornotes.usecases
 
-import com.udomomo.liquornotes.controllers.ReviewResponse
-import com.udomomo.liquornotes.controllers.TagResponse
 import com.udomomo.liquornotes.domains.ReviewRepository
 import com.udomomo.liquornotes.domains.TagRepository
 import com.udomomo.liquornotes.ids.Id
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+
+data class ListReviewResponse(
+    val id: String,
+    val userId: String,
+    val title: String,
+    val content: String,
+    val star: Double,
+    val tags: List<ListTagResponse>,
+)
+
+data class ListTagResponse(
+    val id: String,
+    val name: String,
+)
 
 @Service
 @Transactional(readOnly = true)
@@ -14,19 +26,19 @@ class ListReviewsUseCase(
     private val reviewRepository: ReviewRepository,
     private val tagRepository: TagRepository,
 ) {
-    fun execute(userId: String): List<ReviewResponse> {
+    fun execute(userId: String): List<ListReviewResponse> {
         val reviews = reviewRepository.listBy(Id(userId))
         val tags = tagRepository.listBy(reviews.flatMap { it.tagIds })
 
         return reviews.map {
-            ReviewResponse(
+            ListReviewResponse(
                 it.id.value,
                 it.userId.value,
                 it.title,
                 it.content,
                 it.star.value,
                 it.tagIds.map { tagId ->
-                    TagResponse(
+                    ListTagResponse(
                         tagId.value,
                         tags.find { tag -> tag.id == tagId }?.name ?: "",
                     )
