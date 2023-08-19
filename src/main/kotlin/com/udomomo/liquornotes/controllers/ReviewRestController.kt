@@ -7,6 +7,9 @@ import com.udomomo.liquornotes.usecases.GetReviewResponse
 import com.udomomo.liquornotes.usecases.GetReviewUseCase
 import com.udomomo.liquornotes.usecases.ListReviewResponse
 import com.udomomo.liquornotes.usecases.ListReviewsUseCase
+import com.udomomo.liquornotes.usecases.UpdateReviewRequest
+import com.udomomo.liquornotes.usecases.UpdateReviewUseCase
+import com.udomomo.liquornotes.usecases.UpdateTagRequest
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
@@ -14,6 +17,7 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
@@ -22,6 +26,7 @@ class ReviewRestController(
     private val listReviewsUseCase: ListReviewsUseCase,
     private val getReviewUseCase: GetReviewUseCase,
     private val createReviewUseCase: CreateReviewUseCase,
+    private val updateReviewUseCase: UpdateReviewUseCase,
 ) {
     @GetMapping("{userId}/reviews")
     fun list(
@@ -38,18 +43,42 @@ class ReviewRestController(
         return getReviewUseCase.execute(userId, reviewId)
     }
 
-    @PostMapping("/review")
+    @PostMapping("{userId}/review")
     fun post(
+        @PathVariable("userId") userId: String,
         @RequestBody @Validated request: PostRequestBody,
     ) {
         createReviewUseCase.execute(
             CreateReviewRequest(
-                userId = request.userId!!,
+                userId = userId,
                 title = request.title!!,
                 content = request.content!!,
                 star = request.star,
                 tags = request.tags.map {
                     CreateTagRequest(
+                        id = it.id,
+                        name = it.name!!,
+                    )
+                },
+            ),
+        )
+    }
+
+    @PutMapping("{userId}/review/{reviewId}")
+    fun put(
+        @PathVariable("userId") userId: String,
+        @PathVariable("reviewId") reviewId: String,
+        @RequestBody @Validated request: PostRequestBody,
+    ) {
+        updateReviewUseCase.execute(
+            UpdateReviewRequest(
+                userId = userId,
+                reviewId = reviewId,
+                title = request.title!!,
+                content = request.content!!,
+                star = request.star,
+                tags = request.tags.map {
+                    UpdateTagRequest(
                         id = it.id,
                         name = it.name!!,
                     )

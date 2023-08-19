@@ -7,9 +7,12 @@ import com.udomomo.liquornotes.ids.Id
 import com.udomomo.liquornotes.infrastructure.entities.ReviewEntity
 import com.udomomo.liquornotes.infrastructure.entities.ReviewTable
 import com.udomomo.liquornotes.infrastructure.entities.ReviewTagMappingTable
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.batchInsert
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.update
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
@@ -76,6 +79,25 @@ class ReviewRepositoryImpl : ReviewRepository {
         }
 
         // tagをreviewに紐付ける
+        ReviewTagMappingTable.batchInsert(review.tagIds) { tagId ->
+            this[ReviewTagMappingTable.reviewId] = review.id.value
+            this[ReviewTagMappingTable.tagId] = tagId.value
+            this[ReviewTagMappingTable.createdAt] = createdAt
+            this[ReviewTagMappingTable.updatedAt] = updatedAt
+        }
+    }
+
+    override fun update(review: Review) {
+        val createdAt = LocalDateTime.now()
+        val updatedAt = LocalDateTime.now()
+        ReviewTable.update({ ReviewTable.id eq review.id.value }) {
+            it[title] = review.title
+            it[content] = review.content
+            it[star] = review.star.value
+            it[this.updatedAt] = updatedAt
+        }
+
+        ReviewTagMappingTable.deleteWhere { reviewId eq review.id.value }
         ReviewTagMappingTable.batchInsert(review.tagIds) { tagId ->
             this[ReviewTagMappingTable.reviewId] = review.id.value
             this[ReviewTagMappingTable.tagId] = tagId.value

@@ -6,4 +6,5 @@ interface ReviewRepository {
     fun listBy(userId: Id): List<Review>
     fun findBy(userId: Id, reviewId: Id): Review?
     fun save(review: Review)
+    fun update(review: Review)
 }
