@@ -1,0 +1,17 @@
+spring.profiles.active: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    jdbc-url: jdbc:mysql://localhost:13406/liquor-notes?rewriteBatchedStatements=true
+    username: mysql
+    password: mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
+aws:
+  s3:
+    endpoint: http://localhost:14572
+    region: ap-northeast-1
+    bucket: liquor-notes
