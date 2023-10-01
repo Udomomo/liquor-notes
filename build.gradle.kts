@@ -18,6 +18,24 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    create("integrationTest") {
+        java {
+            setSrcDirs(listOf("src/integrationTest/kotlin"))
+        }
+        resources.setSrcDirs(listOf("src/integrationTest/resources"))
+        compileClasspath += sourceSets.main.get().output
+        runtimeClasspath += sourceSets.main.get().output
+    }
+}
+
+val integrationTestImplementation: Configuration by configurations.getting {
+    extendsFrom(configurations.testImplementation.get())
+}
+val integrationTestRuntimeOnly: Configuration by configurations.getting {
+    extendsFrom(configurations.testRuntimeOnly.get())
+}
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     // implementation("org.springframework.boot:spring-boot-starter-security")
@@ -50,6 +68,13 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+val integrationTest = task<Test>("integrationTest") {
+    testClassesDirs = sourceSets["integrationTest"].output.classesDirs
+    classpath = sourceSets["integrationTest"].runtimeClasspath
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+tasks.check { dependsOn(integrationTest) }
