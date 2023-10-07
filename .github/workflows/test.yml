@@ -19,5 +19,5 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-    - name: test with Gradle
+    - name: Run unit test
       run: ./gradlew test
