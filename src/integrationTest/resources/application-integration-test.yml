@@ -6,7 +6,7 @@ spring:
     activate:
       on-profile: local
   datasource:
-    jdbc-url: jdbc:mysql://localhost:13406/liquor-notes?rewriteBatchedStatements=true
+    jdbc-url: jdbc:mysql://localhost:13406/liquor-notes-test?rewriteBatchedStatements=true
     username: mysql
     password: mysql
     driver-class-name: com.mysql.cj.jdbc.Driver
