@@ -4,9 +4,7 @@ import com.udomomo.liquornotes.domains.Review
 import com.udomomo.liquornotes.domains.ReviewRepository
 import com.udomomo.liquornotes.domains.Star
 import com.udomomo.liquornotes.ids.IdFactory
-import org.jetbrains.exposed.sql.transactions.TransactionManager
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.jupiter.api.AfterEach
+import com.udomomo.liquornotes.testhelper.ITBase
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
@@ -16,18 +14,9 @@ import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 @Transactional
-class ReviewRepositoryImplIT {
+class ReviewRepositoryImplITBase : ITBase() {
     @Autowired
     private lateinit var reviewRepository: ReviewRepository
-
-    @AfterEach
-    fun tearDown() {
-        transaction {
-            db.dialect.allTablesNames().forEach {
-                TransactionManager.current().exec("TRUNCATE TABLE ${it.split(".")[1]}")
-            }
-        }
-    }
 
     @Test
     fun `list review successfully`() {
@@ -48,7 +37,12 @@ class ReviewRepositoryImplIT {
         val result = reviewRepository.listBy(userId)
 
         assertEquals(1, result.size)
-        assertEquals(result[0].id, review.id)
+        assertEquals(result[0].id, id)
+        assertEquals(result[0].userId, userId)
+        assertEquals(result[0].title, "title")
+        assertEquals(result[0].content, "content")
+        assertEquals(result[0].star, Star.of(3.5))
+        assertEquals(result[0].tagIds, listOf(tagId))
     }
 
     @Test
@@ -70,6 +64,12 @@ class ReviewRepositoryImplIT {
         val result = reviewRepository.findBy(userId, id)
 
         assertNotNull(result)
+        assertEquals(result!!.id, id)
+        assertEquals(result.userId, userId)
+        assertEquals(result.title, "title")
+        assertEquals(result.content, "content")
+        assertEquals(result.star, Star.of(3.5))
+        assertEquals(result.tagIds, listOf(tagId))
     }
 
     @Test
@@ -102,6 +102,10 @@ class ReviewRepositoryImplIT {
 
         assertEquals(1, result.size)
         assertEquals(result[0].id, review.id)
+        assertEquals(result[0].userId, userId)
+        assertEquals(result[0].title, "title")
         assertEquals(result[0].content, "new content")
+        assertEquals(result[0].star, Star.of(3.5))
+        assertEquals(result[0].tagIds, listOf(tagId))
     }
 }
