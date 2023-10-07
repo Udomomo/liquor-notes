@@ -105,4 +105,9 @@ class ReviewRepositoryImpl : ReviewRepository {
             this[ReviewTagMappingTable.updatedAt] = updatedAt
         }
     }
+
+    override fun delete(userId: Id, reviewId: Id) {
+        ReviewTable.deleteWhere { ReviewTable.userId eq userId.value and(ReviewTable.id eq reviewId.value) }
+        ReviewTagMappingTable.deleteWhere { ReviewTagMappingTable.reviewId eq reviewId.value }
+    }
 }

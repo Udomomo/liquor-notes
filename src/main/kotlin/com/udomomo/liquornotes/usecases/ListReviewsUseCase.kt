@@ -6,7 +6,7 @@ import com.udomomo.liquornotes.ids.Id
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-data class ListReviewResponse(
+data class ListReviewsResponse(
     val id: String,
     val userId: String,
     val title: String,
@@ -26,12 +26,12 @@ class ListReviewsUseCase(
     private val reviewRepository: ReviewRepository,
     private val tagRepository: TagRepository,
 ) {
-    fun execute(userId: String): List<ListReviewResponse> {
+    fun execute(userId: String): List<ListReviewsResponse> {
         val reviews = reviewRepository.listBy(Id(userId))
         val tags = tagRepository.listBy(reviews.flatMap { it.tagIds })
 
         return reviews.map {
-            ListReviewResponse(
+            ListReviewsResponse(
                 it.id.value,
                 it.userId.value,
                 it.title,

@@ -3,9 +3,10 @@ package com.udomomo.liquornotes.controllers
 import com.udomomo.liquornotes.usecases.CreateReviewRequest
 import com.udomomo.liquornotes.usecases.CreateReviewUseCase
 import com.udomomo.liquornotes.usecases.CreateTagRequest
+import com.udomomo.liquornotes.usecases.DeleteReviewUseCase
 import com.udomomo.liquornotes.usecases.GetReviewResponse
 import com.udomomo.liquornotes.usecases.GetReviewUseCase
-import com.udomomo.liquornotes.usecases.ListReviewResponse
+import com.udomomo.liquornotes.usecases.ListReviewsResponse
 import com.udomomo.liquornotes.usecases.ListReviewsUseCase
 import com.udomomo.liquornotes.usecases.UpdateReviewRequest
 import com.udomomo.liquornotes.usecases.UpdateReviewUseCase
@@ -14,6 +15,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -27,11 +29,12 @@ class ReviewRestController(
     private val getReviewUseCase: GetReviewUseCase,
     private val createReviewUseCase: CreateReviewUseCase,
     private val updateReviewUseCase: UpdateReviewUseCase,
+    private val deleteReviewUseCase: DeleteReviewUseCase,
 ) {
     @GetMapping("{userId}/reviews")
     fun list(
         @PathVariable("userId") userId: String,
-    ): List<ListReviewResponse> {
+    ): List<ListReviewsResponse> {
         return listReviewsUseCase.execute(userId)
     }
 
@@ -85,6 +88,14 @@ class ReviewRestController(
                 },
             ),
         )
+    }
+
+    @DeleteMapping("{userId}/review/{reviewId}")
+    fun delete(
+        @PathVariable("userId") userId: String,
+        @PathVariable("reviewId") reviewId: String,
+    ) {
+        deleteReviewUseCase.execute(userId, reviewId)
     }
 }
 

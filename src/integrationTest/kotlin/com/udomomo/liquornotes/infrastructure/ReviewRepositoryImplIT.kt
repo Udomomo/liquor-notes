@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 @Transactional
-class ReviewRepositoryImplITBase : ITBase() {
+class ReviewRepositoryImplIT : ITBase() {
     @Autowired
     private lateinit var reviewRepository: ReviewRepository
 
@@ -107,5 +107,28 @@ class ReviewRepositoryImplITBase : ITBase() {
         assertEquals(result[0].content, "new content")
         assertEquals(result[0].star, Star.of(3.5))
         assertEquals(result[0].tagIds, listOf(tagId))
+    }
+
+    @Test
+    fun `delete review successfully`() {
+        val id = IdFactory.generate()
+        val userId = IdFactory.generate()
+        val tagId = IdFactory.generate()
+        val review = Review.of(
+            id = id,
+            userId = userId,
+            title = "title",
+            content = "content",
+            star = Star.of(3.5),
+            tagIds = listOf(tagId),
+        )
+
+        reviewRepository.save(review)
+
+        reviewRepository.delete(userId, id)
+
+        val result = reviewRepository.listBy(userId)
+
+        assertEquals(0, result.size)
     }
 }

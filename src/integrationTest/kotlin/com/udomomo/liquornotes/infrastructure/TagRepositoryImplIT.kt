@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 @Transactional
-class TagRepositoryImplITBase : ITBase() {
+class TagRepositoryImplIT : ITBase() {
     @Autowired
     private lateinit var tagRepository: TagRepository
 

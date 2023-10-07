@@ -7,4 +7,5 @@ interface ReviewRepository {
     fun findBy(userId: Id, reviewId: Id): Review?
     fun save(review: Review)
     fun update(review: Review)
+    fun delete(userId: Id, reviewId: Id)
 }
