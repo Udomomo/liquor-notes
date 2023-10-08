@@ -5,12 +5,15 @@ import com.udomomo.liquornotes.domains.ReviewRepository
 import com.udomomo.liquornotes.domains.Star
 import com.udomomo.liquornotes.ids.Id
 import com.udomomo.liquornotes.infrastructure.entities.ReviewEntity
+import com.udomomo.liquornotes.infrastructure.entities.ReviewLocationMappingTable
+import com.udomomo.liquornotes.infrastructure.entities.ReviewLocationMappingTable.reviewId
 import com.udomomo.liquornotes.infrastructure.entities.ReviewTable
 import com.udomomo.liquornotes.infrastructure.entities.ReviewTagMappingTable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.update
 import org.springframework.stereotype.Repository
@@ -26,10 +29,19 @@ class ReviewRepositoryImpl : ReviewRepository {
             ReviewTagMappingTable.reviewId inList reviewEntities.map { entity -> entity.id.value }
         }.map { Pair(it[ReviewTagMappingTable.reviewId], it[ReviewTagMappingTable.tagId]) }
 
+        val reviewLocationMappings = ReviewLocationMappingTable.select {
+            ReviewLocationMappingTable.reviewId inList reviewEntities.map { entity -> entity.id.value }
+        }.map { Pair(it[ReviewLocationMappingTable.reviewId], it[ReviewLocationMappingTable.locationId]) }
+
         return reviewEntities.map { reviewEntity ->
             val tagIds = reviewTagMappings
                 .filter { it.first == reviewEntity.id.value }
                 .map { Id(it.second) }
+
+            val locationId = reviewLocationMappings
+                .firstOrNull { it.first == reviewEntity.id.value }
+                ?.let { Id(it.second) }
+
             Review.of(
                 id = Id(reviewEntity.id.value),
                 userId = Id(reviewEntity.userId),
@@ -37,6 +49,7 @@ class ReviewRepositoryImpl : ReviewRepository {
                 content = reviewEntity.content,
                 star = Star.of(reviewEntity.star),
                 tagIds = tagIds,
+                locationId = locationId
             )
         }
     }
@@ -51,9 +64,17 @@ class ReviewRepositoryImpl : ReviewRepository {
             .select { ReviewTagMappingTable.reviewId eq reviewEntity.id.value }
             .map { Pair(it[ReviewTagMappingTable.reviewId], it[ReviewTagMappingTable.tagId]) }
 
+        val reviewLocationMappings = ReviewLocationMappingTable
+            .select { ReviewLocationMappingTable.reviewId eq reviewEntity.id.value}
+            .map { Pair(it[ReviewLocationMappingTable.reviewId], it[ReviewLocationMappingTable.locationId]) }
+
         val tagIds = reviewTagMappings
             .filter { it.first == reviewEntity.id.value }
             .map { Id(it.second) }
+
+        val locationId = reviewLocationMappings
+            .firstOrNull { it.first == reviewEntity.id.value }
+            ?.let { Id(it.second) }
 
         return Review.of(
             id = Id(reviewEntity.id.value),
@@ -62,6 +83,7 @@ class ReviewRepositoryImpl : ReviewRepository {
             content = reviewEntity.content,
             star = Star.of(reviewEntity.star),
             tagIds = tagIds,
+            locationId = locationId
         )
     }
 
@@ -85,6 +107,16 @@ class ReviewRepositoryImpl : ReviewRepository {
             this[ReviewTagMappingTable.createdAt] = createdAt
             this[ReviewTagMappingTable.updatedAt] = updatedAt
         }
+
+        if (review.locationId != null) {
+            ReviewLocationMappingTable.insert {
+                it[ReviewLocationMappingTable.reviewId] = review.id.value
+                it[ReviewLocationMappingTable.locationId] = review.locationId.value
+                it[ReviewLocationMappingTable.createdAt] = createdAt
+                it[ReviewLocationMappingTable.updatedAt] = updatedAt
+            }
+        }
+
     }
 
     override fun update(review: Review) {
@@ -97,17 +129,29 @@ class ReviewRepositoryImpl : ReviewRepository {
             it[this.updatedAt] = updatedAt
         }
 
-        ReviewTagMappingTable.deleteWhere { reviewId eq review.id.value }
+        ReviewTagMappingTable.deleteWhere { ReviewTagMappingTable.reviewId eq review.id.value }
         ReviewTagMappingTable.batchInsert(review.tagIds) { tagId ->
             this[ReviewTagMappingTable.reviewId] = review.id.value
             this[ReviewTagMappingTable.tagId] = tagId.value
             this[ReviewTagMappingTable.createdAt] = createdAt
             this[ReviewTagMappingTable.updatedAt] = updatedAt
         }
+
+        if (review.locationId != null) {
+            ReviewLocationMappingTable.update({ ReviewLocationMappingTable.reviewId eq review.id.value}) {
+                it[ReviewLocationMappingTable.reviewId] = review.id.value
+                it[ReviewLocationMappingTable.locationId] = review.locationId.value
+                it[ReviewLocationMappingTable.createdAt] = createdAt
+                it[ReviewLocationMappingTable.updatedAt] = updatedAt
+            }
+        } else {
+            ReviewLocationMappingTable.deleteWhere { ReviewLocationMappingTable.reviewId eq review.id.value }
+        }
     }
 
     override fun delete(userId: Id, reviewId: Id) {
         ReviewTable.deleteWhere { ReviewTable.userId eq userId.value and(ReviewTable.id eq reviewId.value) }
         ReviewTagMappingTable.deleteWhere { ReviewTagMappingTable.reviewId eq reviewId.value }
+        ReviewLocationMappingTable.deleteWhere { ReviewLocationMappingTable.reviewId eq reviewId.value }
     }
 }

@@ -9,6 +9,7 @@ class Review private constructor(
     val content: String,
     val star: Star,
     val tagIds: List<Id>,
+    val locationId: Id?
 ) {
     companion object {
         fun of(
@@ -18,6 +19,7 @@ class Review private constructor(
             content: String,
             star: Star,
             tagIds: List<Id>,
+            locationId: Id?
         ): Review {
             if (title.length > 100) throw IllegalArgumentException("title is too long: $title")
             if (content.length > 1000) throw IllegalArgumentException("content is too long: $content")
@@ -26,7 +28,7 @@ class Review private constructor(
                 throw IllegalArgumentException("Multiple same tag exists: $tagIds")
             }
 
-            return Review(id, userId, title, content, star, tagIds)
+            return Review(id, userId, title, content, star, tagIds, locationId)
         }
     }
 }

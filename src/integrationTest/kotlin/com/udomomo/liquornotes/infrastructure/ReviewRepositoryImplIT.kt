@@ -23,6 +23,7 @@ class ReviewRepositoryImplIT : ITBase() {
         val id = IdFactory.generate()
         val userId = IdFactory.generate()
         val tagId = IdFactory.generate()
+        val locationId = IdFactory.generate()
         val review = Review.of(
             id = id,
             userId = userId,
@@ -30,6 +31,7 @@ class ReviewRepositoryImplIT : ITBase() {
             content = "content",
             star = Star.of(3.5),
             tagIds = listOf(tagId),
+            locationId = locationId
         )
 
         reviewRepository.save(review)
@@ -43,6 +45,7 @@ class ReviewRepositoryImplIT : ITBase() {
         assertEquals(result[0].content, "content")
         assertEquals(result[0].star, Star.of(3.5))
         assertEquals(result[0].tagIds, listOf(tagId))
+        assertEquals(result[0].locationId, locationId)
     }
 
     @Test
@@ -50,6 +53,7 @@ class ReviewRepositoryImplIT : ITBase() {
         val id = IdFactory.generate()
         val userId = IdFactory.generate()
         val tagId = IdFactory.generate()
+        val locationId = IdFactory.generate()
         val review = Review.of(
             id = id,
             userId = userId,
@@ -57,6 +61,7 @@ class ReviewRepositoryImplIT : ITBase() {
             content = "content",
             star = Star.of(3.5),
             tagIds = listOf(tagId),
+            locationId = locationId
         )
 
         reviewRepository.save(review)
@@ -70,6 +75,7 @@ class ReviewRepositoryImplIT : ITBase() {
         assertEquals(result.content, "content")
         assertEquals(result.star, Star.of(3.5))
         assertEquals(result.tagIds, listOf(tagId))
+        assertEquals(result.locationId, locationId)
     }
 
     @Test
@@ -77,6 +83,7 @@ class ReviewRepositoryImplIT : ITBase() {
         val id = IdFactory.generate()
         val userId = IdFactory.generate()
         val tagId = IdFactory.generate()
+        val locationId = IdFactory.generate()
         val review = Review.of(
             id = id,
             userId = userId,
@@ -84,6 +91,7 @@ class ReviewRepositoryImplIT : ITBase() {
             content = "content",
             star = Star.of(3.5),
             tagIds = listOf(tagId),
+            locationId = locationId
         )
 
         reviewRepository.save(review)
@@ -95,6 +103,7 @@ class ReviewRepositoryImplIT : ITBase() {
             content = "new content",
             star = Star.of(3.5),
             tagIds = listOf(tagId),
+            locationId = locationId
         )
         reviewRepository.update(updatedReview)
 
@@ -107,6 +116,7 @@ class ReviewRepositoryImplIT : ITBase() {
         assertEquals(result[0].content, "new content")
         assertEquals(result[0].star, Star.of(3.5))
         assertEquals(result[0].tagIds, listOf(tagId))
+        assertEquals(result[0].locationId, locationId)
     }
 
     @Test
@@ -114,6 +124,7 @@ class ReviewRepositoryImplIT : ITBase() {
         val id = IdFactory.generate()
         val userId = IdFactory.generate()
         val tagId = IdFactory.generate()
+        val locationId = IdFactory.generate()
         val review = Review.of(
             id = id,
             userId = userId,
@@ -121,6 +132,7 @@ class ReviewRepositoryImplIT : ITBase() {
             content = "content",
             star = Star.of(3.5),
             tagIds = listOf(tagId),
+            locationId = locationId
         )
 
         reviewRepository.save(review)

@@ -8,7 +8,7 @@ class Tag private constructor(
 ) {
     companion object {
         fun of(id: Id, name: String): Tag {
-            if (name.length > 50) throw IllegalArgumentException("name is too long")
+            if (name.length > 50) throw IllegalArgumentException("Tag name is too long")
 
             return Tag(id, name)
         }

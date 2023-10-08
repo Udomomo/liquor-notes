@@ -32,3 +32,19 @@ create table if not exists review_tag_mappings (
     updated_at timestamp default current_timestamp,
     primary key(review_id, tag_id)
 );
+
+create table if not exists locations (
+    id varchar(26) primary key,
+    name varchar(50) not null,
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp,
+    index idx_location_name (name)
+);
+
+create table if not exists review_location_mappings (
+    review_id varchar(26) not null,
+    location_id varchar(26) not null,
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp,
+    primary key(review_id, location_id)
+);
