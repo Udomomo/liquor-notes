@@ -31,7 +31,7 @@ class ReviewRepositoryImplIT : ITBase() {
             content = "content",
             star = Star.of(3.5),
             tagIds = listOf(tagId),
-            locationId = locationId
+            locationId = locationId,
         )
 
         reviewRepository.save(review)
@@ -61,7 +61,7 @@ class ReviewRepositoryImplIT : ITBase() {
             content = "content",
             star = Star.of(3.5),
             tagIds = listOf(tagId),
-            locationId = locationId
+            locationId = locationId,
         )
 
         reviewRepository.save(review)
@@ -91,7 +91,7 @@ class ReviewRepositoryImplIT : ITBase() {
             content = "content",
             star = Star.of(3.5),
             tagIds = listOf(tagId),
-            locationId = locationId
+            locationId = locationId,
         )
 
         reviewRepository.save(review)
@@ -103,7 +103,7 @@ class ReviewRepositoryImplIT : ITBase() {
             content = "new content",
             star = Star.of(3.5),
             tagIds = listOf(tagId),
-            locationId = locationId
+            locationId = locationId,
         )
         reviewRepository.update(updatedReview)
 
@@ -132,7 +132,7 @@ class ReviewRepositoryImplIT : ITBase() {
             content = "content",
             star = Star.of(3.5),
             tagIds = listOf(tagId),
-            locationId = locationId
+            locationId = locationId,
         )
 
         reviewRepository.save(review)

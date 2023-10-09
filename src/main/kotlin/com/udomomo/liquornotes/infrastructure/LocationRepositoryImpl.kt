@@ -1,7 +1,7 @@
 package com.udomomo.liquornotes.infrastructure
 
-import com.udomomo.liquornotes.domains.LocationRepository
 import com.udomomo.liquornotes.domains.Location
+import com.udomomo.liquornotes.domains.LocationRepository
 import com.udomomo.liquornotes.ids.Id
 import com.udomomo.liquornotes.infrastructure.entities.LocationEntity
 import com.udomomo.liquornotes.infrastructure.entities.LocationTable
@@ -11,6 +11,17 @@ import java.time.LocalDateTime
 
 @Repository
 class LocationRepositoryImpl : LocationRepository {
+    override fun listBy(locationIds: List<Id>): List<Location> {
+        return LocationTable
+            .select { LocationTable.id inList locationIds.map { it.value } }
+            .map {
+                Location.of(
+                    id = Id(it[LocationTable.id].value),
+                    name = it[LocationTable.name],
+                )
+            }
+    }
+
     override fun findById(id: Id): Location? {
         val entity = LocationEntity.find { LocationTable.id eq id.value }
             .singleOrNull()
@@ -22,7 +33,7 @@ class LocationRepositoryImpl : LocationRepository {
         val createdAt = LocalDateTime.now()
         val updatedAt = LocalDateTime.now()
 
-        LocationEntity.new (id = location.id.value) {
+        LocationEntity.new(id = location.id.value) {
             name = location.name
             this.createdAt = createdAt
             this.updatedAt = updatedAt

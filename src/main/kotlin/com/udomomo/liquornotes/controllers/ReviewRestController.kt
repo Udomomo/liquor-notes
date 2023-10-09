@@ -1,5 +1,6 @@
 package com.udomomo.liquornotes.controllers
 
+import com.udomomo.liquornotes.usecases.CreateLocationRequest
 import com.udomomo.liquornotes.usecases.CreateReviewRequest
 import com.udomomo.liquornotes.usecases.CreateReviewUseCase
 import com.udomomo.liquornotes.usecases.CreateTagRequest
@@ -8,6 +9,7 @@ import com.udomomo.liquornotes.usecases.GetReviewResponse
 import com.udomomo.liquornotes.usecases.GetReviewUseCase
 import com.udomomo.liquornotes.usecases.ListReviewsResponse
 import com.udomomo.liquornotes.usecases.ListReviewsUseCase
+import com.udomomo.liquornotes.usecases.UpdateLocationRequest
 import com.udomomo.liquornotes.usecases.UpdateReviewRequest
 import com.udomomo.liquornotes.usecases.UpdateReviewUseCase
 import com.udomomo.liquornotes.usecases.UpdateTagRequest
@@ -63,6 +65,14 @@ class ReviewRestController(
                         name = it.name!!,
                     )
                 },
+                location = if (request.location == null) {
+                    null
+                } else {
+                    CreateLocationRequest(
+                        id = request.location.id,
+                        name = request.location.name!!,
+                    )
+                },
             ),
         )
     }
@@ -84,6 +94,14 @@ class ReviewRestController(
                     UpdateTagRequest(
                         id = it.id,
                         name = it.name!!,
+                    )
+                },
+                location = if (request.location == null) {
+                    null
+                } else {
+                    UpdateLocationRequest(
+                        id = request.location.id,
+                        name = request.location.name!!,
                     )
                 },
             ),
@@ -115,9 +133,19 @@ data class PostRequestBody(
     val star: Double,
 
     val tags: List<TagRequestBody>,
+
+    val location: LocationRequestBody?,
 )
 
 data class TagRequestBody(
+    val id: String?,
+
+    @NotBlank
+    @Size(max = 50)
+    val name: String?,
+)
+
+data class LocationRequestBody(
     val id: String?,
 
     @NotBlank

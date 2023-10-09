@@ -49,7 +49,7 @@ class ReviewRepositoryImpl : ReviewRepository {
                 content = reviewEntity.content,
                 star = Star.of(reviewEntity.star),
                 tagIds = tagIds,
-                locationId = locationId
+                locationId = locationId,
             )
         }
     }
@@ -65,7 +65,7 @@ class ReviewRepositoryImpl : ReviewRepository {
             .map { Pair(it[ReviewTagMappingTable.reviewId], it[ReviewTagMappingTable.tagId]) }
 
         val reviewLocationMappings = ReviewLocationMappingTable
-            .select { ReviewLocationMappingTable.reviewId eq reviewEntity.id.value}
+            .select { ReviewLocationMappingTable.reviewId eq reviewEntity.id.value }
             .map { Pair(it[ReviewLocationMappingTable.reviewId], it[ReviewLocationMappingTable.locationId]) }
 
         val tagIds = reviewTagMappings
@@ -83,7 +83,7 @@ class ReviewRepositoryImpl : ReviewRepository {
             content = reviewEntity.content,
             star = Star.of(reviewEntity.star),
             tagIds = tagIds,
-            locationId = locationId
+            locationId = locationId,
         )
     }
 
@@ -116,7 +116,6 @@ class ReviewRepositoryImpl : ReviewRepository {
                 it[ReviewLocationMappingTable.updatedAt] = updatedAt
             }
         }
-
     }
 
     override fun update(review: Review) {
@@ -138,7 +137,7 @@ class ReviewRepositoryImpl : ReviewRepository {
         }
 
         if (review.locationId != null) {
-            ReviewLocationMappingTable.update({ ReviewLocationMappingTable.reviewId eq review.id.value}) {
+            ReviewLocationMappingTable.update({ ReviewLocationMappingTable.reviewId eq review.id.value }) {
                 it[ReviewLocationMappingTable.reviewId] = review.id.value
                 it[ReviewLocationMappingTable.locationId] = review.locationId.value
                 it[ReviewLocationMappingTable.createdAt] = createdAt
