@@ -8,9 +8,11 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 
-@SpringBootTest
+@SpringBootTest(properties = ["spring.config.location=classpath:/application-integration-test.yml"])
+@ActiveProfiles("test")
 @Transactional
 class LocationRepositoryImplIT : ITBase() {
     @Autowired
@@ -29,10 +31,8 @@ class LocationRepositoryImplIT : ITBase() {
         val result = locationRepository.listBy(listOf(id1, id2))
 
         Assertions.assertEquals(2, result.size)
-        Assertions.assertEquals(result[0].id, location1.id)
-        Assertions.assertEquals(result[0].name, "location1")
-        Assertions.assertEquals(result[1].id, location2.id)
-        Assertions.assertEquals(result[1].name, "location2")
+        Assertions.assertEquals(result.first { it.id == id1 }.name, "location1")
+        Assertions.assertEquals(result.first { it.id == id2 }.name, "location2")
     }
 
     @Test

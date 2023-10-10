@@ -8,9 +8,11 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 
-@SpringBootTest
+@SpringBootTest(properties = ["spring.config.location=classpath:/application-integration-test.yml"])
+@ActiveProfiles("test")
 @Transactional
 class TagRepositoryImplIT : ITBase() {
     @Autowired
@@ -28,9 +30,7 @@ class TagRepositoryImplIT : ITBase() {
         val result = tagRepository.listBy(listOf(id1, id2))
 
         assertEquals(2, result.size)
-        assertEquals(result[0].id, tag1.id)
-        assertEquals(result[0].name, "tag1")
-        assertEquals(result[1].id, tag2.id)
-        assertEquals(result[1].name, "tag2")
+        assertEquals(result.first { it.id == id1 }.name, "tag1")
+        assertEquals(result.first { it.id == id2 }.name, "tag2")
     }
 }

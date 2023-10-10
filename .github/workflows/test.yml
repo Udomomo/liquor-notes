@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -21,3 +21,15 @@ jobs:
         distribution: 'temurin'
     - name: Run unit test
       run: ./gradlew test
+  integration_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: prepare test db
+        run: |
+          docker-compose -f docker/docker-compose.yml up -d db-test
