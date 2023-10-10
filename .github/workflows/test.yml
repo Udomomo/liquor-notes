@@ -33,3 +33,6 @@ jobs:
       - name: prepare test db
         run: |
           docker-compose -f docker/docker-compose.yml up -d db-test
+      - name: run integration test
+        run: |
+          /bin/bash -x .github/scripts/integration-test.sh

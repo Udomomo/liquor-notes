@@ -19,7 +19,7 @@ class Review private constructor(
             content: String,
             star: Star,
             tagIds: List<Id>,
-            locationId: Id?,
+            locationId: Id? = null,
         ): Review {
             if (title.length > 100) throw IllegalArgumentException("title is too long: $title")
             if (content.length > 1000) throw IllegalArgumentException("content is too long: $content")

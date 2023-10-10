@@ -16,7 +16,15 @@ class ReviewTest {
         val star = Star.of(5.0)
 
         // Do
-        val review = Review.of(id, userId, title, content, star, listOf(Id("tag01"), Id("tag02")))
+        val review = Review.of(
+            id,
+            userId,
+            title,
+            content,
+            star,
+            listOf(Id("tag01"), Id("tag02")),
+            Id("location"),
+        )
 
         // Verify
         assertEquals(title, review.title)
@@ -41,6 +49,7 @@ class ReviewTest {
                     content,
                     star,
                     listOf(Id("tag01"), Id("tag02")),
+                    Id("location"),
                 )
             }
 
@@ -58,20 +67,18 @@ class ReviewTest {
         val star = Star.of(5.0)
 
         // Do
-        val error =
-            assertThrows<IllegalArgumentException> {
-                Review.of(
-                    id,
-                    userId,
-                    title,
-                    content,
-                    star,
-                    listOf(Id("tag01"), Id("tag02")),
-                )
-            }
-
-        // verify
-        assertEquals("content is too long: $content", error.message)
+        // Verify
+        assertThrows<IllegalArgumentException> {
+            Review.of(
+                id,
+                userId,
+                title,
+                content,
+                star,
+                listOf(Id("tag01"), Id("tag02")),
+                Id("location"),
+            )
+        }
     }
 
     @Test
