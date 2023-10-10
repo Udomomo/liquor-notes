@@ -5,7 +5,10 @@ timeout=180
 count=0
 state=""
 
-docker-compose -f docker/docker-compose.yml up -d db-test
+docker compose version
+docker compose -f docker/docker-compose.yml up -d db-test
+
+docker compose -f docker/docker-compose.yml ps --format json
 
 while [ "$state" != '"running"' ]; do
   state=$(docker compose -f docker/docker-compose.yml ps --format json | jq '.[] | select(.Service == "db-test") | .State')
