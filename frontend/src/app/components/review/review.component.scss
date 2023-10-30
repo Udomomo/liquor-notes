@@ -10,14 +10,13 @@
 }
 
 .card-header {
-  max-height: 200px;
   display: flex;
   gap: 16px;
 }
 
 .image {
-  flex: 1;
-  min-height: 135px;
+  flex: 1; // flexの子要素同士で幅の割合を指定する
+  height: 135px;
 }
 
 .summary {
