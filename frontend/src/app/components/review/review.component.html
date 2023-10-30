@@ -6,28 +6,28 @@
       </div>
       <div class="summary">
         <div class="title">
-          <span>Review Title</span>
+          <span>{{ review.title }}</span>
         </div>
         <div class="star">
-          <span>Star</span>
+          <span>{{ review.star }}</span>
         </div>
-        <div class="author">
-          <span>Author</span>
+        <div class="username">
+          <span>{{ review.user.name }}</span>
         </div>
       </div>
     </div>
     <div class="card-body">
-      <span>Body</span>
+      <span>{{ review.contents }}</span>
     </div>
     <div class="card-footer">
       <div class="date">
-        <span>Date</span>
+        <span>{{ review.createdAt }}</span>
       </div>
-      <div class="store">
-        <span>Store</span>
+      <div class="location">
+        <span>{{ review.location.name }}</span>
       </div>
       <div class="tags">
-        <span>Tags</span>
+        <span>{{ tagNames.join(', ') }}</span>
       </div>
     </div>
   </div>
