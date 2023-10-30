@@ -6,7 +6,7 @@
   margin: 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 }
 
 .card-header {
@@ -24,10 +24,18 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
 }
 
-.title {
-  font-weight: bold;
+.username {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .card-body {
@@ -38,5 +46,12 @@
   max-height: 100px;
   display: flex;
   flex-direction: column;
+  font-size: 14px;
   gap: 8px;
+
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
 }
