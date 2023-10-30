@@ -1,0 +1,33 @@
+.card {
+  width: 50%;
+}
+
+.card-contents {
+  margin: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-header {
+  max-height: 200px;
+  display: flex;
+  gap: 16px;
+}
+
+.image {
+  width: 33%;
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-footer {
+  max-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
