@@ -18,7 +18,7 @@ export class ReviewListComponent implements OnInit {
   reviews$: Signal<Review[]> = signal([]);
 
   constructor(private store: Store<ReviewListState>) {
-    loadReviews({userId:"01ARZ3NDEKTSV4RRFFQ69G5FAV"})
+    //loadReviews({userId:"01ARZ3NDEKTSV4RRFFQ69G5FAV"})
   }
 
   ngOnInit(): void {
