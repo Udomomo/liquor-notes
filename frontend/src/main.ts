@@ -4,11 +4,17 @@ import { importProvidersFrom } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { routes } from './app/app.routes';
 import { StoreModule } from '@ngrx/store';
+import { reviewListReducer } from './app/components/review-list/review-list.reducers';
+import { EffectsModule } from '@ngrx/effects';
+import { ReviewListEffects } from './app/components/review-list/review.effects';
+import { HttpClientModule } from '@angular/common/http';
 
 
 bootstrapApplication(AppComponent, {
   providers: [importProvidersFrom(
+    HttpClientModule,
     RouterModule.forRoot(routes),
-    StoreModule.forRoot({ review: ReviewReducer })
+    EffectsModule.forRoot([ReviewListEffects]),
+    StoreModule.forRoot({ reviews: reviewListReducer })
   )],
 }).catch((err) => console.error(err));

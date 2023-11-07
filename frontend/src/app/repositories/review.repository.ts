@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Review } from "../models/Review";
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ReviewRepository{
   constructor(private http: HttpClient) {}
 

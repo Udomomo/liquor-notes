@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { loadReviews, loadReviewsSuccess } from "../components/review-list/review-list.actions";
+import { loadReviews, loadReviewsSuccess } from "./review-list.actions";
 import { catchError, map, of, switchMap } from "rxjs";
-import { ReviewRepository } from "../repositories/review.repository";
+import { ReviewRepository } from "../../repositories/review.repository";
 
 @Injectable()
 export class ReviewListEffects {

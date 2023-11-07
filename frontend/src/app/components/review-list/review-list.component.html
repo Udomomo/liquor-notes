@@ -1,5 +1,3 @@
 <div class="review-list">
-  <div *ngFor="let review of reviews">
-    <app-review></app-review>
-  </div>
+  <app-review *ngFor="let review of reviews$()" [review]="review"></app-review>
 </div>
