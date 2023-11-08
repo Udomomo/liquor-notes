@@ -13,7 +13,27 @@ import { Review } from 'src/app/models/Review';
 })
 export class ReviewComponent {
   @Input()
-  review: Review | null = null
+  title: string = ""
+  
+  @Input()
+  star: number = 0
 
-  tagNames = this.review?.tags.map(tag => tag.name) ?? []
+  @Input()
+  userName: string | undefined = ""
+
+  @Input()
+  content: string = ""
+
+  @Input()
+  createdAt: string = ""
+
+  @Input()
+  locationName: string | undefined = ""
+
+  @Input()
+  tags: string[] = []
+
+  tagNames(): string {
+    return this.tags.join(", ")
+  }
 }

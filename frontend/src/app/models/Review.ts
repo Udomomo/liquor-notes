@@ -3,7 +3,7 @@ export interface Review {
   user: User,
   title: string,
   star: number,
-  contents: string,
+  content: string,
   createdAt: string,
   location: Location,
   tags: Tag[]

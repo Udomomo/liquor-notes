@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ReviewComponent } from '../review/review.component';
 import { Store } from '@ngrx/store';
 import { ReviewListState } from 'src/app/stores/review-list.store';
-import { Review } from 'src/app/models/Review';
+import { Review, Tag } from 'src/app/models/Review';
 import { loadReviewsType } from './review-list.actions';
 import { Observable } from 'rxjs';
-import { selectReviews } from './review-list.selector';
+import { selectReviews } from './review-list.selectors';
 
 @Component({
   selector: 'app-review-list',
@@ -24,5 +24,9 @@ export class ReviewListComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch({type: loadReviewsType, userId: "01ARZ3NDEKTSV4RRFFQ69G5FAV"})
+  }
+
+  extractTagNames(tags: Tag[]): string[] {
+    return tags.map(tag => tag.name)
   }
 }
