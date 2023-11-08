@@ -16,7 +16,7 @@ bootstrapApplication(AppComponent, {
     HttpClientModule,
     RouterModule.forRoot(routes),
     EffectsModule.forRoot([ReviewListEffects]),
-    StoreModule.forRoot({ reviews: reviewListReducer }),
+    StoreModule.forRoot({ reviewList: reviewListReducer }),
     StoreDevtoolsModule.instrument({})
   )],
 }).catch((err) => console.error(err));

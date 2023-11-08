@@ -1,9 +1,12 @@
-import { createSelector } from '@ngrx/store';
-import { ReviewListState } from 'src/app/stores/review-list.store';
+import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { ReviewListState } from "src/app/stores/review-list.store";
 
-export const reviewListFeature = (state: ReviewListState) => state;
+// main.tsに登録した当該storeのkey名を使う
+const reviewListStateKey = 'reviewList';
 
-export const reviewListSelector = createSelector(
-  reviewListFeature,
-  (state: ReviewListState) => Array.from(state.reviews)
+export const selectReviewListState = createFeatureSelector<ReviewListState>(reviewListStateKey);
+
+export const selectReviews = createSelector(
+  selectReviewListState,
+  (state: ReviewListState) => state.reviews
 );
