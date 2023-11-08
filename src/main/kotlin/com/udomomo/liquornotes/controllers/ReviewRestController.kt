@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@RestController
+@RestController()
+@RequestMapping("api/{userId}")
 class ReviewRestController(
     private val listReviewsUseCase: ListReviewsUseCase,
     private val getReviewUseCase: GetReviewUseCase,
@@ -33,14 +35,14 @@ class ReviewRestController(
     private val updateReviewUseCase: UpdateReviewUseCase,
     private val deleteReviewUseCase: DeleteReviewUseCase,
 ) {
-    @GetMapping("{userId}/reviews")
+    @GetMapping("reviews")
     fun list(
         @PathVariable("userId") userId: String,
     ): List<ListReviewsResponse> {
         return listReviewsUseCase.execute(userId)
     }
 
-    @GetMapping("{userId}/review/{reviewId}")
+    @GetMapping("review/{reviewId}")
     fun get(
         @PathVariable("userId") userId: String,
         @PathVariable("reviewId") reviewId: String,
@@ -48,7 +50,7 @@ class ReviewRestController(
         return getReviewUseCase.execute(userId, reviewId)
     }
 
-    @PostMapping("{userId}/review")
+    @PostMapping("review")
     fun post(
         @PathVariable("userId") userId: String,
         @RequestBody @Validated request: PostRequestBody,
@@ -77,7 +79,7 @@ class ReviewRestController(
         )
     }
 
-    @PutMapping("{userId}/review/{reviewId}")
+    @PutMapping("review/{reviewId}")
     fun put(
         @PathVariable("userId") userId: String,
         @PathVariable("reviewId") reviewId: String,
@@ -108,7 +110,7 @@ class ReviewRestController(
         )
     }
 
-    @DeleteMapping("{userId}/review/{reviewId}")
+    @DeleteMapping("review/{reviewId}")
     fun delete(
         @PathVariable("userId") userId: String,
         @PathVariable("reviewId") reviewId: String,
