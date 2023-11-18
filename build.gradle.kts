@@ -38,7 +38,7 @@ val integrationTestRuntimeOnly: Configuration by configurations.getting {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    // implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -48,6 +48,7 @@ dependencies {
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
     implementation(platform("software.amazon.awssdk:bom:2.20.76"))
     implementation("software.amazon.awssdk:s3")
+    implementation("com.auth0:java-jwt:4.4.0")
 
     dependencies {
         implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
@@ -58,7 +59,7 @@ dependencies {
     }
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    // testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("org.springframework.security:spring-security-test")
 }
 
 tasks.withType<KotlinCompile> {
