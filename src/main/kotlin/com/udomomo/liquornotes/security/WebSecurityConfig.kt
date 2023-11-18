@@ -3,6 +3,8 @@ package com.udomomo.liquornotes.security
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.invoke
@@ -14,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain
 @EnableWebSecurity
 class WebSecurityConfig {
     @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain {
+    fun filterChain(http: HttpSecurity, authenticationManager: AuthenticationManager): SecurityFilterChain {
         http {
             authorizeRequests {
                 authorize(anyRequest, authenticated)
@@ -22,13 +24,19 @@ class WebSecurityConfig {
                 HttpMethod.DELETE
             }
             csrf { disable() }
-            formLogin { loginPage = "/api/login" }
         }
+
+        http.addFilter(ApiUsernamePasswordAuthenticationFilter(authenticationManager))
         return http.build()
     }
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
+    }
+
+    @Bean
+    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
+        return authenticationConfiguration.authenticationManager
     }
 }
