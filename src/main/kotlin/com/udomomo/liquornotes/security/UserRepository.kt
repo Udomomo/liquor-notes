@@ -1,6 +1,5 @@
 package com.udomomo.liquornotes.security
 
-import com.udomomo.liquornotes.infrastructure.entities.TagTable
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Column
@@ -18,9 +17,9 @@ class UserRepository {
 }
 
 object UserTable : IdTable<String>("users") {
-    override val id: Column<EntityID<String>> = TagTable.varchar("id", 26).entityId()
-    val username = TagTable.varchar("name", 50)
-    val password = TagTable.varchar("name", 128)
+    override val id: Column<EntityID<String>> = UserTable.varchar("id", 26).entityId()
+    val username = UserTable.varchar("username", 50)
+    val password = UserTable.varchar("password", 128)
     val createdAt = datetime("created_at")
     val updatedAt = datetime("updated_at")
 }

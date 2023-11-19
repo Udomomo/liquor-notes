@@ -18,7 +18,8 @@ class WebSecurityConfig {
     @Bean
     fun filterChain(http: HttpSecurity, authenticationManager: AuthenticationManager): SecurityFilterChain {
         http {
-            authorizeRequests {
+            authorizeHttpRequests {
+                authorize("/api/login", permitAll)
                 authorize(anyRequest, authenticated)
                 HttpMethod.PUT
                 HttpMethod.DELETE
@@ -32,7 +33,7 @@ class WebSecurityConfig {
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
+        return BCryptPasswordEncoder(8)
     }
 
     @Bean

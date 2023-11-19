@@ -15,3 +15,9 @@ aws:
     endpoint: http://localhost:14572
     region: ap-northeast-1
     bucket: liquor-notes
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
