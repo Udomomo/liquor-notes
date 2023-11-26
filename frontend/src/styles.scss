@@ -41,8 +41,12 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif; 
   font-size: 16px;
   background-color: #FBEBCC;
-}
 
-mat-icon {
-  color: #543302;
+  // material UIの色をカスタム指定。
+  .mat-mdc-raised-button.mat-primary {
+    background-color: #543302;
+  }
+  mat-icon {
+    color: #543302;
+  }
 }
