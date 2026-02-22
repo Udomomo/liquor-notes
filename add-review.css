@@ -1,0 +1,406 @@
+/* ===========================
+   CSS Variables（style.css と共通）
+   =========================== */
+:root {
+    /* Header */
+    --header-bg: #9B7355;
+    --header-text: #FFF8F2;
+    --header-height: 52px;
+
+    /* Colors */
+    --body-bg: #ffffff;
+
+    --btn-cream-bg: #f5edde;
+    --btn-cream-hover: #ede3cf;
+    --btn-cream-text: #4a3320;
+
+    --rating-color: #c8923a;
+
+    --text-primary: #2c1a0e;
+    --text-secondary: #6b5244;
+    --text-muted: #9b8070;
+
+    --border-light: #ede3d8;
+    --border-focus: #9B7355;
+
+    /* Typography */
+    --font-brand: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-body: 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif;
+
+    /* Radius */
+    --radius-btn: 6px;
+    --radius-input: 6px;
+
+    /* Layout */
+    --content-max-width: 680px;
+    --content-pad: 1.25rem;
+}
+
+/* ===========================
+   Reset & Base
+   =========================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--body-bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ===========================
+   Header
+   =========================== */
+.header {
+    background: var(--header-bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--header-height);
+}
+
+.header-inner {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 var(--content-pad);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.page-title {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--header-text);
+    letter-spacing: 0.02em;
+}
+
+/* 戻るボタンと右スペーサーを同幅にしてタイトルを中央へ */
+.btn-back,
+.header-spacer {
+    width: 72px;
+}
+
+.header-spacer {
+    display: block;
+}
+
+/* ===========================
+   Buttons
+   =========================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-back {
+    background: rgba(255, 255, 255, 0.18);
+    color: var(--header-text);
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-btn);
+    font-size: 0.875rem;
+    font-weight: 500;
+    gap: 0.2rem;
+}
+
+.btn-back:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+.btn-save {
+    width: 100%;
+    background: var(--header-bg);
+    color: var(--header-text);
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-btn);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+.btn-save:hover {
+    background: #8a6548;
+}
+
+.btn-save:active {
+    background: #7a5840;
+}
+
+/* ===========================
+   Main
+   =========================== */
+.main {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 1.5rem var(--content-pad) 3rem;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ===========================
+   Visually Hidden（アクセシビリティ）
+   =========================== */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ===========================
+   画像アップロード
+   =========================== */
+.form-section {
+    width: 100%;
+}
+
+.image-upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 160px;
+    border: 2px dashed var(--border-light);
+    border-radius: 10px;
+    background: #fdfaf7;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    overflow: hidden;
+    gap: 0;
+}
+
+.image-upload-area:hover {
+    border-color: #c9a880;
+    background: #faf5ed;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem 1.5rem;
+}
+
+.upload-icon {
+    color: #c9a880;
+}
+
+.upload-text {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.upload-sub {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+}
+
+.upload-preview {
+    width: 100%;
+    height: 200px;
+}
+
+.upload-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ===========================
+   フォームグループ
+   =========================== */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.required {
+    color: #b85c38;
+    margin-left: 0.2rem;
+    font-size: 0.875rem;
+}
+
+/* ===========================
+   フォーム入力
+   =========================== */
+.form-input {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-primary);
+    background: #fff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-input);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+
+.form-input:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(155, 115, 85, 0.15);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.7;
+}
+
+.form-input-date {
+    cursor: pointer;
+}
+
+/* ===========================
+   評価スライダー
+   =========================== */
+.rating-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.rating-edge {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.rating-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: var(--border-light);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Chromium / Safari */
+.rating-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--rating-color);
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    box-shadow: 0 1px 4px rgba(200, 146, 58, 0.35);
+}
+
+.rating-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(200, 146, 58, 0.45);
+}
+
+/* Firefox */
+.rating-slider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 50%;
+    background: var(--rating-color);
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(200, 146, 58, 0.35);
+}
+
+.rating-slider::-moz-range-track {
+    height: 4px;
+    background: var(--border-light);
+    border-radius: 2px;
+}
+
+.rating-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.2rem;
+    padding-left: calc(0.8125rem + 0.75rem); /* rating-edge幅 + gap でスライダー開始位置に揃える */
+}
+
+.rating-star {
+    color: var(--rating-color);
+    font-size: 1rem;
+}
+
+.rating-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--rating-color);
+    letter-spacing: 0.01em;
+    min-width: 3ch;
+}
+
+/* ===========================
+   保存ボタン
+   =========================== */
+.form-actions {
+    margin-top: 0.5rem;
+}
+
+/* ===========================
+   Responsive
+   =========================== */
+@media (max-width: 480px) {
+    :root {
+        --content-pad: 1rem;
+    }
+
+    .main {
+        padding-top: 1.25rem;
+    }
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記録作成 | liquor-notes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="add-review.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-inner">
+            <a href="/" class="btn btn-back">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                戻る
+            </a>
+            <h1 class="page-title">記録作成</h1>
+            <span class="header-spacer" aria-hidden="true"></span>
+        </div>
+    </header>
+
+    <main class="main">
+        <form class="form" action="#" method="post" enctype="multipart/form-data" novalidate>
+
+            <!-- 画像アップロード -->
+            <div class="form-section">
+                <label class="image-upload-area" for="image-input" id="image-upload-label">
+                    <div class="upload-preview" id="upload-preview" hidden>
+                        <img id="preview-img" src="" alt="選択した画像">
+                    </div>
+                    <div class="upload-placeholder" id="upload-placeholder">
+                        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                        <span class="upload-text">写真を選択</span>
+                        <span class="upload-sub">またはカメラ撮影</span>
+                    </div>
+                </label>
+                <input type="file" id="image-input" name="image" accept="image/*" capture="environment" class="visually-hidden">
+            </div>
+
+            <!-- お酒の名前 -->
+            <div class="form-group">
+                <label class="form-label" for="name">
+                    お酒の名前
+                    <span class="required" aria-label="必須">*</span>
+                </label>
+                <input type="text" id="name" name="name" class="form-input" placeholder="例：山崎12年" required>
+            </div>
+
+            <!-- 評価 -->
+            <div class="form-group">
+                <label class="form-label">
+                    評価
+                    <span class="required" aria-label="必須">*</span>
+                </label>
+                <div class="rating-row">
+                    <span class="rating-edge">1.0</span>
+                    <input
+                        type="range"
+                        id="rating"
+                        name="rating"
+                        class="rating-slider"
+                        min="1" max="10" step="0.1" value="7.5"
+                        aria-label="評価"
+                        oninput="ratingDisplay.textContent = parseFloat(this.value).toFixed(1)"
+                    >
+                    <span class="rating-edge">10.0</span>
+                </div>
+                <div class="rating-value-row">
+                    <span class="rating-star" aria-hidden="true">★</span>
+                    <span class="rating-value" id="ratingDisplay">7.5</span>
+                </div>
+            </div>
+
+            <!-- 飲んだ日付 -->
+            <div class="form-group">
+                <label class="form-label" for="drunk-at">
+                    飲んだ日付
+                    <span class="required" aria-label="必須">*</span>
+                </label>
+                <input type="date" id="drunk-at" name="drunk_at" class="form-input form-input-date" value="2026-02-22" required>
+            </div>
+
+            <!-- 感想メモ -->
+            <div class="form-group">
+                <label class="form-label" for="memo">感想メモ</label>
+                <textarea id="memo" name="memo" class="form-input form-textarea" rows="4" placeholder="香り、味、余韻など感じたことを..."></textarea>
+            </div>
+
+            <!-- 保存 -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-save">保存する</button>
+            </div>
+
+        </form>
+    </main>
+
+    <script>
+        // 画像プレビュー
+        const imageInput = document.getElementById('image-input');
+        const previewImg = document.getElementById('preview-img');
+        const uploadPreview = document.getElementById('upload-preview');
+        const uploadPlaceholder = document.getElementById('upload-placeholder');
+
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const url = URL.createObjectURL(file);
+            previewImg.src = url;
+            uploadPreview.hidden = false;
+            uploadPlaceholder.hidden = true;
+        });
+    </script>
+
+</body>
+</html>
