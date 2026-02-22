@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>liquor-notes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-inner">
+            <h1 class="logo">liquor-notes</h1>
+            <button class="btn btn-logout">logout</button>
+        </div>
+    </header>
+
+    <div class="toolbar">
+        <div class="toolbar-top">
+            <div class="search-wrap">
+                <span class="search-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                </span>
+                <input type="search" class="search-input" placeholder="名前で検索" aria-label="お酒の名前で検索">
+            </div>
+        </div>
+        <div class="toolbar-bottom">
+            <div class="filter-group">
+                <label class="filter-label" for="rating-filter">評価:</label>
+                <select class="filter-select" id="rating-filter" aria-label="評価でフィルタ">
+                    <option value="">すべて</option>
+                    <option value="9">9.0 以上</option>
+                    <option value="8">8.0 以上</option>
+                    <option value="7">7.0 以上</option>
+                    <option value="6">6.0 以上</option>
+                </select>
+            </div>
+            <button class="btn btn-new">＋ 新規</button>
+        </div>
+    </div>
+
+    <main class="main">
+        <div class="drink-list">
+
+            <article class="drink-card">
+                <div class="card-body">
+                    <div class="card-thumb">
+                        <div class="thumb-placeholder" role="img" aria-label="山崎12年の画像">🥃</div>
+                    </div>
+                    <div class="card-info">
+                        <div class="card-header">
+                            <h2 class="drink-name">山崎12年</h2>
+                            <button class="btn btn-edit">編集</button>
+                        </div>
+                        <div class="drink-rating" aria-label="評価 8.5">
+                            <span class="rating-star" aria-hidden="true">★</span>
+                            <span class="rating-value">8.5</span>
+                        </div>
+                        <time class="drink-date" datetime="2026-02-10">2026/02/10</time>
+                    </div>
+                </div>
+                <p class="drink-memo">香りが華やかで、口当たりがまろやか。フルーティーなアロマと上品なスモーキーさが絶妙なバランスを保っている。</p>
+            </article>
+
+            <article class="drink-card">
+                <div class="card-body">
+                    <div class="card-thumb">
+                        <div class="thumb-placeholder" role="img" aria-label="獺祭 純米大吟醸の画像">🍶</div>
+                    </div>
+                    <div class="card-info">
+                        <div class="card-header">
+                            <h2 class="drink-name">獺祭 純米大吟醸</h2>
+                            <button class="btn btn-edit">編集</button>
+                        </div>
+                        <div class="drink-rating" aria-label="評価 9.0">
+                            <span class="rating-star" aria-hidden="true">★</span>
+                            <span class="rating-value">9.0</span>
+                        </div>
+                        <time class="drink-date" datetime="2026-02-05">2026/02/05</time>
+                    </div>
+                </div>
+                <p class="drink-memo">フルーティーで飲みやすい。透明感のある甘みと爽やかな酸味が心地よく、後味がすっきりしている。</p>
+            </article>
+
+        </div>
+    </main>
+
+</body>
+</html>
