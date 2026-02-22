@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&family=Playfair+Display:wght@400;600&display=swap');
+
+/* ===========================
+   CSS Variables
+   =========================== */
+:root {
+  /* Header */
+  --header-bg: #9B7355;
+  --header-text: #FFF8F2;
+  --header-height: 52px;
+
+  /* Colors */
+  --body-bg: #ffffff;
+  --card-bg: #ffffff;
+  --toolbar-bg: #fdfaf7;
+
+  --btn-cream-bg: #f5edde;
+  --btn-cream-hover: #ede3cf;
+  --btn-cream-active: #e3d5bb;
+  --btn-cream-text: #4a3320;
+
+  --rating-color: #c8923a;
+
+  --text-primary: #2c1a0e;
+  --text-secondary: #6b5244;
+  --text-muted: #9b8070;
+
+  --border-light: #ede3d8;
+  --border-focus: #9B7355;
+
+  --card-shadow:
+    0 1px 4px rgba(60, 30, 10, 0.06),
+    0 3px 10px rgba(60, 30, 10, 0.07);
+  --card-shadow-hover:
+    0 2px 8px rgba(60, 30, 10, 0.09),
+    0 6px 18px rgba(60, 30, 10, 0.10);
+
+  /* Typography */
+  --font-brand: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif;
+
+  /* Radius */
+  --radius-btn: 6px;
+  --radius-card: 10px;
+  --radius-input: 6px;
+  --radius-thumb: 6px;
+
+  /* Layout */
+  --content-max-width: 680px;
+  --content-pad: 1.25rem;
+}
+
+/* ===========================
+   Reset & Base
+   =========================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--body-bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@media (max-width: 480px) {
+  :root {
+    --content-pad: 1rem;
+  }
+}
