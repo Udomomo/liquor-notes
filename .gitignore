@@ -9,4 +9,5 @@ next-env.d.ts
 .pnpm-store/
 tsconfig.tsbuildinfo
 
+.claude/
 .steering/
