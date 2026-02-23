@@ -7,6 +7,6 @@ node_modules/
 .next/
 next-env.d.ts
 .pnpm-store/
+tsconfig.tsbuildinfo
 
 .steering/
-
