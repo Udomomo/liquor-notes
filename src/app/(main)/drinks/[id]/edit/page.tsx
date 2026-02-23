@@ -6,6 +6,7 @@ import Header from '@/components/Header/Header';
 import ImageUploader from '@/components/ImageUploader/ImageUploader';
 import RatingInput from '@/components/RatingInput/RatingInput';
 import Toast from '@/components/Toast/Toast';
+import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog';
 import styles from './page.module.css';
 
 type Props = { params: Promise<{ id: string }> };
@@ -20,6 +21,7 @@ export default function DrinkEditPage({ params }: Props) {
   const [memo, setMemo] = useState('');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -61,13 +63,28 @@ export default function DrinkEditPage({ params }: Props) {
     }
   }
 
+  async function handleDelete() {
+    setShowDialog(false);
+    setErrorMessage(null);
+
+    try {
+      const res = await fetch(`/api/drinks/${id}`, { method: 'DELETE' });
+
+      if (!res.ok) throw new Error('Failed to delete');
+
+      router.push('/');
+    } catch {
+      setErrorMessage('削除に失敗しました。もう一度お試しください。');
+    }
+  }
+
   return (
     <>
       <Header variant="page" title="記録編集" backHref="/" />
 
       <main className={styles.main}>
         <div className={styles.deleteRow}>
-          <button type="button" className={styles.btnDelete}>
+          <button type="button" className={styles.btnDelete} onClick={() => setShowDialog(true)}>
             削除
           </button>
         </div>
@@ -144,6 +161,14 @@ export default function DrinkEditPage({ params }: Props) {
           </form>
         )}
       </main>
+
+      {showDialog && (
+        <ConfirmDialog
+          message="本当に削除してよろしいですか？"
+          onCancel={() => setShowDialog(false)}
+          onConfirm={handleDelete}
+        />
+      )}
 
       {errorMessage && (
         <Toast message={errorMessage} onClose={() => setErrorMessage(null)} />

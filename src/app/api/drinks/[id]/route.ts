@@ -73,3 +73,19 @@ export async function PUT(request: Request, { params }: RouteParams) {
 
   return NextResponse.json(toDrink(data as DrinkRow));
 }
+
+export async function DELETE(_request: Request, { params }: RouteParams) {
+  const { id } = await params;
+
+  const { error } = await supabase
+    .from('drinks')
+    .delete()
+    .eq('id', id)
+    .eq('user_id', CURRENT_USER_ID);
+
+  if (error) {
+    return NextResponse.json({ error: 'Failed to delete drink' }, { status: 500 });
+  }
+
+  return new NextResponse(null, { status: 204 });
+}
