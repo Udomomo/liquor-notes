@@ -4,6 +4,13 @@
   padding: 1.5rem var(--content-pad) 3rem;
 }
 
+.loadingText {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 3rem 0;
+  font-size: 0.9375rem;
+}
+
 .deleteRow {
   display: flex;
   justify-content: flex-end;
