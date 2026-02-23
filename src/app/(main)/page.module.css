@@ -51,3 +51,10 @@
   flex-direction: column;
   gap: 0.75rem;
 }
+
+.status {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem 0;
+  font-size: 0.9375rem;
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header/Header';
 import DrinkCard from '@/components/DrinkCard/DrinkCard';
@@ -9,28 +9,20 @@ import RatingFilter from '@/components/RatingFilter/RatingFilter';
 import type { Drink } from '@/types';
 import styles from './page.module.css';
 
-const SAMPLE_DRINKS: Drink[] = [
-  {
-    id: 1,
-    name: '山崎12年',
-    rating: 8.5,
-    drunkAt: '2026/02/10',
-    memo: '香りが華やかで、口当たりがまろやか。フルーティーなアロマと上品なスモーキーさが絶妙なバランスを保っている。',
-  },
-  {
-    id: 2,
-    name: '獺祭 純米大吟醸',
-    rating: 9.0,
-    drunkAt: '2026/02/05',
-    memo: 'フルーティーで飲みやすい。透明感のある甘みと爽やかな酸味が心地よく、後味がすっきりしている。',
-  },
-];
-
 export default function DrinkListPage() {
+  const [drinks, setDrinks] = useState<Drink[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [ratingFilter, setRatingFilter] = useState('');
 
-  const filtered = SAMPLE_DRINKS.filter((d) => {
+  useEffect(() => {
+    fetch('/api/drinks')
+      .then((res) => res.json())
+      .then((data: Drink[]) => setDrinks(data))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filtered = drinks.filter((d) => {
     const matchName = d.name.includes(search);
     const matchRating = ratingFilter === '' || d.rating >= Number(ratingFilter);
     return matchName && matchRating;
@@ -54,9 +46,15 @@ export default function DrinkListPage() {
 
       <main className={styles.main}>
         <div className={styles.list}>
-          {filtered.map((drink) => (
-            <DrinkCard key={drink.id} drink={drink} />
-          ))}
+          {loading ? (
+            <p className={styles.status}>読み込み中...</p>
+          ) : filtered.length === 0 ? (
+            <p className={styles.status}>記録がありません</p>
+          ) : (
+            filtered.map((drink) => (
+              <DrinkCard key={drink.id} drink={drink} />
+            ))
+          )}
         </div>
       </main>
     </>

@@ -11,3 +11,5 @@ tsconfig.tsbuildinfo
 
 .claude/
 .steering/
+
+.env.local
