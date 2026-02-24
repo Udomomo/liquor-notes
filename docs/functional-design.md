@@ -38,7 +38,7 @@ erDiagram
     users ||--o{ drinks : "has many"
 
     users {
-        int id PK
+        uuid id PK
         string email UK "メールアドレス"
         string password_hash "パスワードハッシュ"
         datetime created_at "作成日時"
@@ -46,8 +46,8 @@ erDiagram
     }
 
     drinks {
-        int id PK
-        int user_id FK "ユーザーID"
+        uuid id PK
+        uuid user_id FK "ユーザーID"
         string name "お酒の名前"
         decimal rating "評価（1.0〜10.0）"
         text memo "感想メモ（任意）"
@@ -64,7 +64,7 @@ erDiagram
 
 | カラム名 | 型 | 制約 | 説明 |
 |----------|-----|------|------|
-| id | INTEGER | PK, AUTO INCREMENT | ユーザーID |
+| id | UUID | PK, DEFAULT gen_random_uuid() | ユーザーID |
 | email | VARCHAR(255) | UNIQUE, NOT NULL | メールアドレス |
 | password_hash | VARCHAR(255) | NOT NULL | bcryptハッシュ化パスワード |
 | created_at | DATETIME | NOT NULL | 作成日時 |
@@ -74,8 +74,8 @@ erDiagram
 
 | カラム名 | 型 | 制約 | 説明 |
 |----------|-----|------|------|
-| id | INTEGER | PK, AUTO INCREMENT | 記録ID |
-| user_id | INTEGER | FK(users.id), NOT NULL | ユーザーID |
+| id | UUID | PK, DEFAULT gen_random_uuid() | 記録ID |
+| user_id | UUID | FK(users.id), NOT NULL | ユーザーID |
 | name | VARCHAR(255) | NOT NULL | お酒の名前 |
 | rating | DECIMAL(3,1) | NOT NULL, CHECK(1.0〜10.0) | 評価 |
 | memo | TEXT | NULL | 感想メモ |
