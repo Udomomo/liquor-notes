@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import type { Drink } from '@/types';
 
 type DrinkRow = {
-  id: number;
+  id: string;
   name: string;
   rating: number;
   memo: string | null;
@@ -23,18 +23,27 @@ function toDrink(row: DrinkRow): Drink {
 }
 
 // 暫定: 認証実装後にセッションユーザーのIDを使用
-const CURRENT_USER_ID = 1;
+async function getCurrentUserId(): Promise<string> {
+  const { data, error } = await supabase
+    .from('users')
+    .select('id')
+    .eq('email', 'test@example.com')
+    .single();
+
+  if (error || !data) throw new Error('Seed user not found');
+  return data.id as string;
+}
 
 type RouteParams = { params: Promise<{ id: string }> };
 
 export async function GET(_request: Request, { params }: RouteParams) {
-  const { id } = await params;
+  const [{ id }, userId] = await Promise.all([params, getCurrentUserId()]);
 
   const { data, error } = await supabase
     .from('drinks')
     .select('id, name, rating, memo, image_path, drunk_at')
     .eq('id', id)
-    .eq('user_id', CURRENT_USER_ID)
+    .eq('user_id', userId)
     .single();
 
   if (error || !data) {
@@ -45,7 +54,8 @@ export async function GET(_request: Request, { params }: RouteParams) {
 }
 
 export async function PUT(request: Request, { params }: RouteParams) {
-  const { id } = await params;
+  const [{ id }, userId] = await Promise.all([params, getCurrentUserId()]);
+
   const body = await request.json() as {
     name: string;
     rating: number;
@@ -63,7 +73,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)
-    .eq('user_id', CURRENT_USER_ID)
+    .eq('user_id', userId)
     .select('id, name, rating, memo, image_path, drunk_at')
     .single();
 
@@ -75,13 +85,13 @@ export async function PUT(request: Request, { params }: RouteParams) {
 }
 
 export async function DELETE(_request: Request, { params }: RouteParams) {
-  const { id } = await params;
+  const [{ id }, userId] = await Promise.all([params, getCurrentUserId()]);
 
   const { error } = await supabase
     .from('drinks')
     .delete()
     .eq('id', id)
-    .eq('user_id', CURRENT_USER_ID);
+    .eq('user_id', userId);
 
   if (error) {
     return NextResponse.json({ error: 'Failed to delete drink' }, { status: 500 });

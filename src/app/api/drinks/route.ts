@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import type { Drink } from '@/types';
 
 type DrinkRow = {
-  id: number;
+  id: string;
   name: string;
   rating: number;
   memo: string | null;
@@ -23,13 +23,24 @@ function toDrink(row: DrinkRow): Drink {
 }
 
 // 暫定: 認証実装後にセッションユーザーのIDを使用
-const CURRENT_USER_ID = 1;
+async function getCurrentUserId(): Promise<string> {
+  const { data, error } = await supabase
+    .from('users')
+    .select('id')
+    .eq('email', 'test@example.com')
+    .single();
+
+  if (error || !data) throw new Error('Seed user not found');
+  return data.id as string;
+}
 
 export async function GET() {
+  const userId = await getCurrentUserId();
+
   const { data, error } = await supabase
     .from('drinks')
     .select('id, name, rating, memo, image_path, drunk_at')
-    .eq('user_id', CURRENT_USER_ID)
+    .eq('user_id', userId)
     .order('drunk_at', { ascending: false });
 
   if (error) {
@@ -40,6 +51,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const userId = await getCurrentUserId();
+
   const body = await request.json() as {
     name: string;
     rating: number;
@@ -50,7 +63,7 @@ export async function POST(request: Request) {
   const { data, error } = await supabase
     .from('drinks')
     .insert({
-      user_id: CURRENT_USER_ID,
+      user_id: userId,
       name: body.name,
       rating: body.rating,
       memo: body.memo || null,
