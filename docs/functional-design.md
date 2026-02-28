@@ -303,7 +303,7 @@ stateDiagram-v2
 
 ### 6.2 お酒の記録
 
-すべてのエンドポイントは認証必須（Authorizationヘッダー）。
+すべてのエンドポイントは認証必須。
 
 #### GET /api/drinks
 記録一覧を取得
