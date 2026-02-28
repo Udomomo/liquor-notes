@@ -27,6 +27,7 @@ export default function DrinkEditPage({ params }: Props) {
   useEffect(() => {
     fetch(`/api/drinks/${id}`)
       .then((res) => {
+        if (res.status === 401) throw new Error('Unauthorized');
         if (!res.ok) throw new Error('Not found');
         return res.json();
       })
@@ -36,7 +37,9 @@ export default function DrinkEditPage({ params }: Props) {
         setDrunkAt(drink.drunkAt.replaceAll('/', '-'));
         setMemo(drink.memo ?? '');
       })
-      .catch(() => setErrorMessage('データの取得に失敗しました。'))
+      .catch((err: Error) =>
+        setErrorMessage(err.message === 'Unauthorized' ? 'レビューの取得に失敗しました' : 'データの取得に失敗しました。')
+      )
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -53,6 +56,10 @@ export default function DrinkEditPage({ params }: Props) {
         body: JSON.stringify({ name, rating, memo: memo || undefined, drunk_at: drunkAt }),
       });
 
+      if (res.status === 401) {
+        setErrorMessage('レビューの取得に失敗しました');
+        return;
+      }
       if (!res.ok) throw new Error('Failed to update');
 
       router.push('/');
@@ -70,6 +77,10 @@ export default function DrinkEditPage({ params }: Props) {
     try {
       const res = await fetch(`/api/drinks/${id}`, { method: 'DELETE' });
 
+      if (res.status === 401) {
+        setErrorMessage('レビューの取得に失敗しました');
+        return;
+      }
       if (!res.ok) throw new Error('Failed to delete');
 
       router.push('/');

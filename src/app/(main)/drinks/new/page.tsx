@@ -34,6 +34,10 @@ export default function DrinkNewPage() {
         }),
       });
 
+      if (res.status === 401) {
+        setErrorMessage('レビューの取得に失敗しました');
+        return;
+      }
       if (!res.ok) {
         throw new Error('送信に失敗しました');
       }
