@@ -6,6 +6,7 @@ import Header from '@/components/Header/Header';
 import DrinkCard from '@/components/DrinkCard/DrinkCard';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import RatingFilter from '@/components/RatingFilter/RatingFilter';
+import Toast from '@/components/Toast/Toast';
 import type { Drink } from '@/types';
 import styles from './page.module.css';
 
@@ -14,11 +15,16 @@ export default function DrinkListPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [ratingFilter, setRatingFilter] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/drinks')
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch');
+        return res.json();
+      })
       .then((data: Drink[]) => setDrinks(data))
+      .catch(() => setErrorMessage('レビューの取得に失敗しました'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -31,6 +37,10 @@ export default function DrinkListPage() {
   return (
     <>
       <Header variant="site" />
+
+      {errorMessage && (
+        <Toast message={errorMessage} onClose={() => setErrorMessage(null)} />
+      )}
 
       <div className={styles.toolbar}>
         <div className={styles.toolbarTop}>

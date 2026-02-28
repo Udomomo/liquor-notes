@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { getAuthenticatedUserId } from '@/lib/get-authenticated-user-id';
 import type { Drink } from '@/types';
 
 type DrinkRow = {
@@ -22,22 +23,17 @@ function toDrink(row: DrinkRow): Drink {
   };
 }
 
-// 暫定: 認証実装後にセッションユーザーのIDを使用
-async function getCurrentUserId(): Promise<string> {
-  const { data, error } = await supabase
-    .from('users')
-    .select('id')
-    .eq('email', 'test@example.com')
-    .single();
-
-  if (error || !data) throw new Error('Seed user not found');
-  return data.id as string;
-}
-
 type RouteParams = { params: Promise<{ id: string }> };
 
 export async function GET(_request: Request, { params }: RouteParams) {
-  const [{ id }, userId] = await Promise.all([params, getCurrentUserId()]);
+  let userId: string;
+  try {
+    userId = await getAuthenticatedUserId();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { id } = await params;
 
   const { data, error } = await supabase
     .from('drinks')
@@ -54,14 +50,22 @@ export async function GET(_request: Request, { params }: RouteParams) {
 }
 
 export async function PUT(request: Request, { params }: RouteParams) {
-  const [{ id }, userId] = await Promise.all([params, getCurrentUserId()]);
+  let userId: string;
+  try {
+    userId = await getAuthenticatedUserId();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-  const body = await request.json() as {
-    name: string;
-    rating: number;
-    memo?: string;
-    drunk_at: string;
-  };
+  const [{ id }, body] = await Promise.all([
+    params,
+    request.json() as Promise<{
+      name: string;
+      rating: number;
+      memo?: string;
+      drunk_at: string;
+    }>,
+  ]);
 
   const { data, error } = await supabase
     .from('drinks')
@@ -85,7 +89,14 @@ export async function PUT(request: Request, { params }: RouteParams) {
 }
 
 export async function DELETE(_request: Request, { params }: RouteParams) {
-  const [{ id }, userId] = await Promise.all([params, getCurrentUserId()]);
+  let userId: string;
+  try {
+    userId = await getAuthenticatedUserId();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { id } = await params;
 
   const { error } = await supabase
     .from('drinks')
