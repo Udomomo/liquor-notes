@@ -5,6 +5,7 @@ import styles from './Header.module.css';
 
 type HeaderProps =
   | { variant: 'site' }
+  | { variant: 'auth' }
   | { variant: 'page'; title: string; backHref: string };
 
 export default function Header(props: HeaderProps) {
@@ -16,6 +17,8 @@ export default function Header(props: HeaderProps) {
             <h1 className={styles.logo}>liquor-notes</h1>
             <button className={styles.btnLogout}>logout</button>
           </>
+        ) : props.variant === 'auth' ? (
+          <h1 className={styles.logo}>liquor-notes</h1>
         ) : (
           <>
             <Link href={props.backHref} className={styles.btnBack}>

@@ -1,0 +1,74 @@
+.main {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 3rem var(--content-pad) 3rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.input {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-primary);
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-input);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(155, 115, 85, 0.15);
+}
+
+.actions {
+  margin-top: 0.5rem;
+}
+
+.btnLogin {
+  width: 100%;
+  background: var(--header-bg);
+  color: var(--header-text);
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btnLogin:hover {
+  background: #8a6548;
+}
+
+.btnLogin:active {
+  background: #7a5840;
+}
