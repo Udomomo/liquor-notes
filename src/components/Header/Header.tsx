@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { supabaseBrowser } from '@/lib/supabase-browser';
 import styles from './Header.module.css';
 
 type HeaderProps =
@@ -9,13 +11,20 @@ type HeaderProps =
   | { variant: 'page'; title: string; backHref: string };
 
 export default function Header(props: HeaderProps) {
+  const router = useRouter();
+
+  async function handleLogout() {
+    await supabaseBrowser.auth.signOut();
+    router.push('/login');
+  }
+
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
         {props.variant === 'site' ? (
           <>
             <h1 className={styles.logo}>liquor-notes</h1>
-            <button className={styles.btnLogout}>logout</button>
+            <button className={styles.btnLogout} onClick={handleLogout}>ログアウト</button>
           </>
         ) : props.variant === 'auth' ? (
           <h1 className={styles.logo}>liquor-notes</h1>
