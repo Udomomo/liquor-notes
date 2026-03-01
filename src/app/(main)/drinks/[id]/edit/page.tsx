@@ -20,6 +20,7 @@ export default function DrinkEditPage({ params }: Props) {
   const [drunkAt, setDrunkAt] = useState('');
   const [memo, setMemo] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [currentThumbnailUrl, setCurrentThumbnailUrl] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
@@ -37,6 +38,7 @@ export default function DrinkEditPage({ params }: Props) {
         setRating(drink.rating);
         setDrunkAt(drink.drunkAt.replaceAll('/', '-'));
         setMemo(drink.memo ?? '');
+        setCurrentThumbnailUrl(drink.thumbnailUrl);
       })
       .catch((err: Error) =>
         setErrorMessage(err.message === 'Unauthorized' ? 'レビューの取得に失敗しました' : 'データの取得に失敗しました。')
@@ -118,7 +120,7 @@ export default function DrinkEditPage({ params }: Props) {
         ) : (
           <form className={styles.form} onSubmit={handleSubmit} noValidate>
 
-            <ImageUploader onChange={setImageFile} />
+            <ImageUploader onChange={setImageFile} initialUrl={currentThumbnailUrl} />
 
             <div className={styles.formGroup}>
               <label className={styles.label} htmlFor="name">

@@ -46,7 +46,17 @@ export async function GET(_request: Request, { params }: RouteParams) {
     return NextResponse.json({ error: 'Drink not found' }, { status: 404 });
   }
 
-  return NextResponse.json(toDrink(data as DrinkRow));
+  const row = data as DrinkRow;
+  const originalFileName = row.image_path?.endsWith('.webp')
+    ? row.image_path.slice(0, -'.webp'.length)
+    : row.image_path;
+  const signedUrl = originalFileName
+    ? (await supabase.storage
+        .from('liquor-notes')
+        .createSignedUrl(`${userId}/${originalFileName}`, 60)).data?.signedUrl
+    : undefined;
+
+  return NextResponse.json({ ...toDrink(row), thumbnailUrl: signedUrl });
 }
 
 export async function PUT(request: Request, { params }: RouteParams) {

@@ -5,9 +5,10 @@ import styles from './ImageUploader.module.css';
 
 type ImageUploaderProps = {
   onChange?: (file: File | null) => void;
+  initialUrl?: string;
 };
 
-export default function ImageUploader({ onChange }: ImageUploaderProps) {
+export default function ImageUploader({ onChange, initialUrl }: ImageUploaderProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -22,13 +23,15 @@ export default function ImageUploader({ onChange }: ImageUploaderProps) {
     onChange?.(file);
   };
 
+  const displayUrl = previewUrl ?? initialUrl ?? null;
+
   return (
     <div className={styles.section}>
       <label className={styles.area} htmlFor="image-input">
-        {previewUrl ? (
+        {displayUrl ? (
           <div className={styles.preview}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={previewUrl} alt="選択した画像" className={styles.previewImg} />
+            <img src={displayUrl} alt="選択した画像" className={styles.previewImg} />
           </div>
         ) : (
           <div className={styles.placeholder}>
