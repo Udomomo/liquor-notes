@@ -339,31 +339,47 @@ stateDiagram-v2
 ```
 
 #### POST /api/drinks
-記録を作成
+記録を作成（画像以外）
 
-**リクエスト（multipart/form-data）:**
+**リクエスト（application/json）:**
 
 | フィールド | 型 | 必須 | 説明 |
 |-----------|-----|------|------|
 | name | string | Yes | お酒の名前 |
 | rating | decimal | Yes | 評価（1.0〜10.0） |
 | memo | string | No | 感想メモ |
-| image | file | No | 画像ファイル（JPEG/PNG） |
 | drunk_at | date | Yes | 飲んだ日付 |
 
 **レスポンス（201）:**
 ```json
 {
-  "id": 1,
-  "name": "山崎12年",
-  "rating": 8.5,
-  "memo": "香りが華やかで...",
-  "image_url": "/api/images/abc123.jpg",
-  "drunk_at": "2026-02-10",
-  "created_at": "2026-02-10T20:30:00Z",
-  "updated_at": "2026-02-10T20:30:00Z"
+  "id": "xxxx-xxxx-xxxx-xxxx"
 }
 ```
+
+#### POST /api/drinks/:id/image
+記録に画像をアップロード
+
+**リクエスト（multipart/form-data）:**
+
+| フィールド | 型 | 必須 | 説明 |
+|-----------|-----|------|------|
+| image | file | Yes | 画像ファイル（JPEG/PNG、10MB以下） |
+
+**処理内容:**
+- 元画像を `liquor-notes` バケットに `<user_id>/<image_uuid>.<ext>` で保存
+- sharp で 80×80 webp のサムネイルを生成し `liquor-notes-thumbnail` バケットに `<user_id>/<image_uuid>.<ext>.webp` で保存
+- `drinks.image_path` を `<image_uuid>.<ext>.webp` に更新
+
+**レスポンス（200）:**
+```json
+{}
+```
+
+**エラー:**
+- `400`: ファイルサイズ超過（10MB超）、または対応外の拡張子
+- `404`: 指定した id のレビューが存在しない（または他ユーザーのレビュー）
+- `500`: ストレージアップロード失敗
 
 #### PUT /api/drinks/:id
 記録を更新

@@ -11,6 +11,7 @@ import styles from './page.module.css';
 export default function DrinkNewPage() {
   const router = useRouter();
   const [rating, setRating] = useState(7.5);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -22,12 +23,16 @@ export default function DrinkNewPage() {
     setSubmitting(true);
     setErrorMessage(null);
 
-    data.set('rating', String(rating));
-
     try {
       const res = await fetch('/api/drinks', {
         method: 'POST',
-        body: data,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: data.get('name') as string,
+          rating,
+          memo: (data.get('memo') as string) || undefined,
+          drunk_at: data.get('drunk_at') as string,
+        }),
       });
 
       if (res.status === 401) {
@@ -36,6 +41,20 @@ export default function DrinkNewPage() {
       }
       if (!res.ok) {
         throw new Error('送信に失敗しました');
+      }
+
+      const { id } = (await res.json()) as { id: string };
+
+      if (imageFile) {
+        const imageData = new FormData();
+        imageData.set('image', imageFile);
+        const imageRes = await fetch(`/api/drinks/${id}/image`, {
+          method: 'POST',
+          body: imageData,
+        });
+        if (!imageRes.ok) {
+          sessionStorage.setItem('flashError', '画像のアップロードに失敗しました');
+        }
       }
 
       router.push('/');
@@ -53,7 +72,7 @@ export default function DrinkNewPage() {
       <main className={styles.main}>
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
 
-          <ImageUploader />
+          <ImageUploader onChange={setImageFile} />
 
           <div className={styles.formGroup}>
             <label className={styles.label} htmlFor="name">

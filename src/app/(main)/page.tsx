@@ -18,6 +18,12 @@ export default function DrinkListPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    const flashError = sessionStorage.getItem('flashError');
+    if (flashError) {
+      setErrorMessage(flashError);
+      sessionStorage.removeItem('flashError');
+    }
+
     fetch('/api/drinks')
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch');

@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import sharp from 'sharp';
 import { supabase } from '@/lib/supabase';
 import { getAuthenticatedUserId } from '@/lib/get-authenticated-user-id';
 import type { Drink } from '@/types';
@@ -24,60 +23,6 @@ function toDrink(row: DrinkRow): Drink {
   };
 }
 
-const ALLOWED_EXTENSIONS = ['jpeg', 'jpg', 'png'] as const;
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-
-function getExtension(filename: string): string {
-  return filename.split('.').pop()?.toLowerCase() ?? '';
-}
-
-function isAllowedExtension(ext: string): ext is (typeof ALLOWED_EXTENSIONS)[number] {
-  return (ALLOWED_EXTENSIONS as readonly string[]).includes(ext);
-}
-
-async function uploadImage(
-  userId: string,
-  file: File,
-): Promise<{ imagePath: string }> {
-  const ext = getExtension(file.name);
-
-  if (!isAllowedExtension(ext)) {
-    throw Object.assign(new Error('Invalid file type'), { status: 400 });
-  }
-  if (file.size > MAX_FILE_SIZE) {
-    throw Object.assign(new Error('File too large'), { status: 400 });
-  }
-
-  const imageUuid = crypto.randomUUID();
-  const originalBuffer = Buffer.from(await file.arrayBuffer());
-  const originalPath = `${userId}/${imageUuid}.${ext}`;
-  const thumbnailPath = `${userId}/${imageUuid}.${ext}.webp`;
-
-  // 元画像をアップロード
-  const { error: originalError } = await supabase.storage
-    .from('liquor-notes')
-    .upload(originalPath, originalBuffer, { contentType: file.type, upsert: false });
-  if (originalError) throw Object.assign(new Error('Failed to upload image'), { status: 500 });
-
-  // sharp でサムネイル生成
-  let thumbnailBuffer: Buffer;
-  try {
-    thumbnailBuffer = await sharp(originalBuffer)
-      .resize(80, 80, { fit: 'cover' })
-      .webp()
-      .toBuffer();
-  } catch {
-    throw Object.assign(new Error('Failed to process image'), { status: 500 });
-  }
-
-  // サムネイルをアップロード
-  const { error: thumbnailError } = await supabase.storage
-    .from('liquor-notes-thumbnail')
-    .upload(thumbnailPath, thumbnailBuffer, { contentType: 'image/webp', upsert: false });
-  if (thumbnailError) throw Object.assign(new Error('Failed to upload thumbnail'), { status: 500 });
-
-  return { imagePath: `${imageUuid}.${ext}.webp` };
-}
 
 async function buildSignedUrlMap(
   userId: string,
@@ -143,42 +88,28 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const formData = await request.formData();
-  const name = formData.get('name') as string;
-  const rating = Number(formData.get('rating'));
-  const memo = (formData.get('memo') as string) || null;
-  const drunk_at = formData.get('drunk_at') as string;
-  const imageFile = formData.get('image') as File | null;
-
-  let imagePath: string | null = null;
-
-  if (imageFile && imageFile.size > 0) {
-    try {
-      const result = await uploadImage(userId, imageFile);
-      imagePath = result.imagePath;
-    } catch (err) {
-      const e = err as { message: string; status?: number };
-      const status = e.status ?? 500;
-      return NextResponse.json({ error: e.message }, { status });
-    }
-  }
+  const body = (await request.json()) as {
+    name: string;
+    rating: number;
+    memo?: string;
+    drunk_at: string;
+  };
 
   const { data, error } = await supabase
     .from('drinks')
     .insert({
       user_id: userId,
-      name,
-      rating,
-      memo,
-      drunk_at,
-      image_path: imagePath,
+      name: body.name,
+      rating: body.rating,
+      memo: body.memo || null,
+      drunk_at: body.drunk_at,
     })
-    .select('id, name, rating, memo, image_path, drunk_at')
+    .select('id')
     .single();
 
   if (error) {
     return NextResponse.json({ error: 'Failed to create drink' }, { status: 500 });
   }
 
-  return NextResponse.json(toDrink(data as DrinkRow), { status: 201 });
+  return NextResponse.json({ id: (data as { id: string }).id }, { status: 201 });
 }
