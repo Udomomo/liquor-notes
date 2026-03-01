@@ -19,6 +19,7 @@ export default function DrinkEditPage({ params }: Props) {
   const [rating, setRating] = useState(7.5);
   const [drunkAt, setDrunkAt] = useState('');
   const [memo, setMemo] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
@@ -61,6 +62,18 @@ export default function DrinkEditPage({ params }: Props) {
         return;
       }
       if (!res.ok) throw new Error('Failed to update');
+
+      if (imageFile) {
+        const imageData = new FormData();
+        imageData.set('image', imageFile);
+        const imageRes = await fetch(`/api/drinks/${id}/image`, {
+          method: 'POST',
+          body: imageData,
+        });
+        if (!imageRes.ok) {
+          sessionStorage.setItem('flashError', '画像のアップロードに失敗しました');
+        }
+      }
 
       router.push('/');
     } catch {
@@ -105,7 +118,7 @@ export default function DrinkEditPage({ params }: Props) {
         ) : (
           <form className={styles.form} onSubmit={handleSubmit} noValidate>
 
-            <ImageUploader />
+            <ImageUploader onChange={setImageFile} />
 
             <div className={styles.formGroup}>
               <label className={styles.label} htmlFor="name">
