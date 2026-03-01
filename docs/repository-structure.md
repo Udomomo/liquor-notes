@@ -70,7 +70,7 @@ liquor-notes/
 │   │   ├── supabase/
 │   │   │   ├── client.ts       # ブラウザ用Supabaseクライアント
 │   │   │   └── server.ts       # サーバー用Supabaseクライアント
-│   │   └── image.ts            # 画像処理（リサイズ・サムネイル生成・HEIC変換）
+│   │   └── image.ts            # 画像処理（リサイズ・サムネイル生成）
 │   ├── types/                  # 型定義
 │   │   └── index.ts            # Drink, User 等の型
 │   └── middleware.ts           # 認証ミドルウェア（未認証リダイレクト）

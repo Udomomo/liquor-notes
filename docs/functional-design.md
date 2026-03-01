@@ -348,7 +348,7 @@ stateDiagram-v2
 | name | string | Yes | お酒の名前 |
 | rating | decimal | Yes | 評価（1.0〜10.0） |
 | memo | string | No | 感想メモ |
-| image | file | No | 画像ファイル（JPEG/PNG/HEIC） |
+| image | file | No | 画像ファイル（JPEG/PNG） |
 | drunk_at | date | Yes | 飲んだ日付 |
 
 **レスポンス（201）:**

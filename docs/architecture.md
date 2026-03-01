@@ -74,7 +74,7 @@ graph TB
 ### 画像処理
 | ツール | 用途 |
 |--------|------|
-| sharp | サーバーサイドでの画像リサイズ・サムネイル生成・HEIC変換 |
+| sharp | サーバーサイドでの画像リサイズ・webp サムネイル生成 |
 
 ### テスト（将来的に導入）
 | ツール | 用途 |
@@ -91,10 +91,9 @@ graph TB
 - Next.js の Middleware で未認証アクセスをログイン画面にリダイレクト
 
 ### 画像処理
-- アップロード対応形式: JPEG, PNG, HEIC
-- HEIC 画像はサーバーサイドで sharp を使い JPEG に変換してから保存
-- 元画像はリサイズ・圧縮して Supabase Storage に保存
-- 正方形サムネイル（中央クロップ）を自動生成し、別途保存
+- アップロード対応形式: JPEG, PNG
+- 元画像は変換せず、そのまま Supabase Storage の `liquor-notes` バケットに保存
+- サムネイルは sharp で 80×80 の webp 形式に変換し、`liquor-notes-thumbnail` バケットに保存（元画像とは別バケット）
 - Supabase Storage のアクセスポリシーで認証済みユーザーのみ画像にアクセス可能
 
 ### 環境変数

@@ -22,16 +22,12 @@ export default function DrinkNewPage() {
     setSubmitting(true);
     setErrorMessage(null);
 
+    data.set('rating', String(rating));
+
     try {
       const res = await fetch('/api/drinks', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: data.get('name') as string,
-          rating,
-          memo: (data.get('memo') as string) || undefined,
-          drunk_at: data.get('drunk_at') as string,
-        }),
+        body: data,
       });
 
       if (res.status === 401) {

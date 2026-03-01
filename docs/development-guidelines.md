@@ -84,7 +84,7 @@ refactor/[説明]   # リファクタリング
 docs/[説明]       # ドキュメント
 ```
 
-例: `feature/drink-list`, `fix/image-upload-heic`
+例: `feature/drink-list`, `fix/image-upload`
 
 ### コミットメッセージ
 [Conventional Commits](https://www.conventionalcommits.org/) に従う。
@@ -104,7 +104,6 @@ docs/[説明]       # ドキュメント
 
 例:
 - `feat: add drink list page with infinite scroll`
-- `fix: handle HEIC image upload on iOS`
 - `docs: update functional design`
 
 ### コミット粒度
