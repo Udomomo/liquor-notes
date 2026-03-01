@@ -110,7 +110,7 @@ export async function DELETE(_request: Request, { params }: RouteParams) {
 
   const { error } = await supabase
     .from('drinks')
-    .delete()
+    .update({ archived: true })
     .eq('id', id)
     .eq('user_id', userId);
 

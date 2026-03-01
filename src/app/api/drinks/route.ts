@@ -63,6 +63,7 @@ export async function GET() {
     .from('drinks')
     .select('id, name, rating, memo, image_path, drunk_at')
     .eq('user_id', userId)
+    .eq('archived', false)
     .order('drunk_at', { ascending: false });
 
   if (error) {
