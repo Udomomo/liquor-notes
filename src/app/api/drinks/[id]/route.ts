@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
-import { getAuthenticatedUserId } from '@/lib/get-authenticated-user-id';
+import { createSupabaseServerClient } from '@/lib/supabase';
 import type { Drink } from '@/types';
 
 type DrinkRow = {
@@ -26,12 +25,12 @@ function toDrink(row: DrinkRow): Drink {
 type RouteParams = { params: Promise<{ id: string }> };
 
 export async function GET(_request: Request, { params }: RouteParams) {
-  let userId: string;
-  try {
-    userId = await getAuthenticatedUserId();
-  } catch {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  const userId = user.id;
 
   const { id } = await params;
 
@@ -60,12 +59,12 @@ export async function GET(_request: Request, { params }: RouteParams) {
 }
 
 export async function PUT(request: Request, { params }: RouteParams) {
-  let userId: string;
-  try {
-    userId = await getAuthenticatedUserId();
-  } catch {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  const userId = user.id;
 
   const [{ id }, body] = await Promise.all([
     params,
@@ -99,12 +98,12 @@ export async function PUT(request: Request, { params }: RouteParams) {
 }
 
 export async function DELETE(_request: Request, { params }: RouteParams) {
-  let userId: string;
-  try {
-    userId = await getAuthenticatedUserId();
-  } catch {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  const userId = user.id;
 
   const { id } = await params;
 

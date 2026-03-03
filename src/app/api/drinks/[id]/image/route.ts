@@ -1,17 +1,16 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
-import { getAuthenticatedUserId } from '@/lib/get-authenticated-user-id';
+import { createSupabaseServerClient } from '@/lib/supabase';
 import { uploadImage } from '@/lib/upload-image';
 
 type RouteParams = { params: Promise<{ id: string }> };
 
 export async function POST(request: Request, { params }: RouteParams) {
-  let userId: string;
-  try {
-    userId = await getAuthenticatedUserId();
-  } catch {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  const userId = user.id;
 
   const { id } = await params;
 
@@ -36,7 +35,7 @@ export async function POST(request: Request, { params }: RouteParams) {
 
   let imagePath: string;
   try {
-    const result = await uploadImage(userId, imageFile);
+    const result = await uploadImage(supabase, userId, imageFile);
     imagePath = result.imagePath;
   } catch (err) {
     const e = err as { message: string; status?: number };

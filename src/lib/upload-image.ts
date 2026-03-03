@@ -1,5 +1,5 @@
 import sharp from 'sharp';
-import { supabase } from '@/lib/supabase';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 const ALLOWED_EXTENSIONS = ['jpeg', 'jpg', 'png'] as const;
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -13,6 +13,7 @@ function isAllowedExtension(ext: string): ext is (typeof ALLOWED_EXTENSIONS)[num
 }
 
 export async function uploadImage(
+  supabase: SupabaseClient,
   userId: string,
   file: File,
 ): Promise<{ imagePath: string }> {

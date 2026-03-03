@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
-import { getAuthenticatedUserId } from '@/lib/get-authenticated-user-id';
+import { createSupabaseServerClient } from '@/lib/supabase';
 import type { Drink } from '@/types';
 
 type DrinkRow = {
@@ -23,41 +22,13 @@ function toDrink(row: DrinkRow): Drink {
   };
 }
 
-
-async function buildSignedUrlMap(
-  userId: string,
-  rows: DrinkRow[],
-): Promise<Record<string, string>> {
-  const paths = rows
-    .filter((r) => r.image_path)
-    .map((r) => `${userId}/${r.image_path}`);
-
-  if (paths.length === 0) return {};
-
-  const { data } = await supabase.storage
-    .from('liquor-notes-thumbnail')
-    .createSignedUrls(paths, 60);
-
-  if (!data) return {};
-
-  const map: Record<string, string> = {};
-  for (const item of data) {
-    if (item.signedUrl && item.path) {
-      // path は "<user_id>/<image_path>" なのでファイル名部分を key にする
-      const imagePath = item.path.replace(`${userId}/`, '');
-      map[imagePath] = item.signedUrl;
-    }
-  }
-  return map;
-}
-
 export async function GET() {
-  let userId: string;
-  try {
-    userId = await getAuthenticatedUserId();
-  } catch {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  const userId = user.id;
 
   const { data, error } = await supabase
     .from('drinks')
@@ -71,7 +42,26 @@ export async function GET() {
   }
 
   const rows = data as DrinkRow[];
-  const signedUrlMap = await buildSignedUrlMap(userId, rows);
+
+  const paths = rows
+    .filter((r) => r.image_path)
+    .map((r) => `${userId}/${r.image_path}`);
+
+  const signedUrlMap: Record<string, string> = {};
+  if (paths.length > 0) {
+    const { data: signedUrls } = await supabase.storage
+      .from('liquor-notes-thumbnail')
+      .createSignedUrls(paths, 60);
+
+    if (signedUrls) {
+      for (const item of signedUrls) {
+        if (item.signedUrl && item.path) {
+          const imagePath = item.path.replace(`${userId}/`, '');
+          signedUrlMap[imagePath] = item.signedUrl;
+        }
+      }
+    }
+  }
 
   return NextResponse.json(
     rows.map((row) => ({
@@ -82,12 +72,12 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  let userId: string;
-  try {
-    userId = await getAuthenticatedUserId();
-  } catch {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  const userId = user.id;
 
   const body = (await request.json()) as {
     name: string;

@@ -101,7 +101,6 @@ graph TB
 |--------|------|
 | NEXT_PUBLIC_SUPABASE_URL | Supabase プロジェクトURL |
 | NEXT_PUBLIC_SUPABASE_ANON_KEY | Supabase 匿名キー |
-| SUPABASE_SERVICE_ROLE_KEY | Supabase サービスロールキー（サーバーサイドのみ） |
 
 ## 5. パフォーマンス要件
 
