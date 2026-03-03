@@ -40,6 +40,7 @@ export async function uploadImage(
   let thumbnailBuffer: Buffer;
   try {
     thumbnailBuffer = await sharp(originalBuffer)
+      .rotate()
       .resize(80, 80, { fit: 'cover' })
       .webp()
       .toBuffer();
