@@ -62,7 +62,6 @@ export default function ImageUploader({ onChange, initialUrl }: ImageUploaderPro
         id="image-input"
         name="image"
         accept="image/*"
-        capture="environment"
         className={styles.hiddenInput}
         onChange={handleChange}
       />
