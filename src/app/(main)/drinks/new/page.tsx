@@ -1,7 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+
+function getTodayLocal(): string {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 import Header from '@/components/Header/Header';
 import ImageUploader from '@/components/ImageUploader/ImageUploader';
 import RatingInput from '@/components/RatingInput/RatingInput';
@@ -11,9 +19,14 @@ import styles from './page.module.css';
 export default function DrinkNewPage() {
   const router = useRouter();
   const [rating, setRating] = useState(7.5);
+  const [drunkAt, setDrunkAt] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    setDrunkAt(getTodayLocal());
+  }, []);
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -107,7 +120,8 @@ export default function DrinkNewPage() {
               id="drunk-at"
               name="drunk_at"
               className={styles.input}
-              defaultValue="2026-02-22"
+              value={drunkAt}
+              onChange={(e) => setDrunkAt(e.target.value)}
               required
             />
           </div>
