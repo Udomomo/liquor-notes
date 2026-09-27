@@ -7,6 +7,7 @@ import DrinkCard from '@/components/DrinkCard/DrinkCard';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import RatingFilter from '@/components/RatingFilter/RatingFilter';
 import Toast from '@/components/Toast/Toast';
+import ImageOverlay from '@/components/ImageOverlay/ImageOverlay';
 import type { Drink } from '@/types';
 import styles from './page.module.css';
 
@@ -16,6 +17,7 @@ export default function DrinkListPage() {
   const [search, setSearch] = useState('');
   const [ratingFilter, setRatingFilter] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [overlayDrink, setOverlayDrink] = useState<Drink | null>(null);
 
   useEffect(() => {
     const flashError = sessionStorage.getItem('flashError');
@@ -48,6 +50,19 @@ export default function DrinkListPage() {
         <Toast message={errorMessage} onClose={() => setErrorMessage(null)} />
       )}
 
+      {overlayDrink && (
+        <ImageOverlay
+          key={overlayDrink.id}
+          drinkId={overlayDrink.id}
+          alt={overlayDrink.name}
+          onClose={() => setOverlayDrink(null)}
+          onError={(message) => {
+            setOverlayDrink(null);
+            setErrorMessage(message);
+          }}
+        />
+      )}
+
       <div className={styles.toolbar}>
         <div className={styles.toolbarTop}>
           <SearchBar value={search} onChange={setSearch} />
@@ -68,7 +83,7 @@ export default function DrinkListPage() {
             <p className={styles.status}>記録がありません</p>
           ) : (
             filtered.map((drink) => (
-              <DrinkCard key={drink.id} drink={drink} />
+              <DrinkCard key={drink.id} drink={drink} onThumbnailClick={setOverlayDrink} />
             ))
           )}
         </div>
