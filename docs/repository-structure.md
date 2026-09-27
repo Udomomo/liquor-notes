@@ -35,7 +35,11 @@ liquor-notes/
 │   │   │   └── drinks/
 │   │   │       ├── route.ts    # GET（一覧）, POST（作成）
 │   │   │       └── [id]/
-│   │   │           └── route.ts # PUT（更新）, DELETE（削除）
+│   │   │           ├── route.ts # PUT（更新）, DELETE（削除）
+│   │   │           ├── image/
+│   │   │           │   └── route.ts # POST（画像アップロード）
+│   │   │           └── originalImage/
+│   │   │               └── route.ts # GET（元画像の署名付きURL取得）
 │   │   ├── layout.tsx          # ルートレイアウト
 │   │   └── globals.css         # グローバルスタイル
 │   ├── components/             # 共通UIコンポーネント
