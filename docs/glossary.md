@@ -19,6 +19,7 @@
 | 画像パス | Image Path | `imagePath` / `image_path` | Supabase Storage 上の画像ファイルパス |
 | 画像URL | Image URL | `imageUrl` / `image_url` | クライアントに返す画像アクセス用URL |
 | サムネイルURL | Thumbnail URL | `thumbnailUrl` / `thumbnail_url` | クライアントに返すサムネイルアクセス用URL |
+| 元画像URL | Original Image URL | `originalImageUrl` | クライアントに返す元画像アクセス用URL（有効期限付きの署名付きURL） |
 
 ## 3. 認証関連用語
 
@@ -50,5 +51,5 @@
 |------|------|-----|
 | TypeScript 変数・プロパティ | camelCase | `drunkAt`, `imageUrl` |
 | DB カラム名 | snake_case | `drunk_at`, `image_url` |
-| API リクエスト/レスポンス | snake_case | `drunk_at`, `rating_min` |
+| API リクエスト/レスポンス | camelCase | `drunkAt`, `originalImageUrl` |
 | CSS クラス名 | camelCase | `drinkCard`, `cardContainer` |
