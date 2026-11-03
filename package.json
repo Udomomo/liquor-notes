@@ -16,9 +16,12 @@
     "sharp": "^0.34.5"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "26.6.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": "26.x"
   }
 }
