@@ -7,3 +7,8 @@
   - remoteとの同期の際は `supabase project link -p <project-ref>` を実行します。project-refはsupabaseプロジェクトのURLの一部です。
   - `supabase db push` でローカルのスキーマをremoteに反映させます。
   - `supabase config push` で設定変更をremoteに反映させます。
+
+# デプロイ
+- masterブランチが更新されると自動的にprd環境にデプロイされます。
+- featureブランチが更新されると自動的にstg環境にデプロイされます。
+  - stg環境は、VercelはPreviewを利用、Supabaseはstg用のプロジェクトを使用します。
