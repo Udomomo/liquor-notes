@@ -10,8 +10,7 @@
       "version": "lts"
     },
     "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {},
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
-  "postCreateCommand": "pnpm install"
+  "postCreateCommand": "pnpm install && curl -fsSL https://claude.ai/install.sh | bash"
 }
