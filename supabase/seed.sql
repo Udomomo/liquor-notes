@@ -3,6 +3,7 @@
 
 WITH auth_user AS (
     INSERT INTO auth.users (
+        id,
         instance_id,
         role,
         aud,
@@ -22,6 +23,7 @@ WITH auth_user AS (
         email_change
     )
     VALUES (
+        gen_random_uuid(),
         '00000000-0000-0000-0000-000000000000',
         'authenticated',
         'authenticated',
@@ -46,7 +48,7 @@ SELECT
     '山崎12年',
     8.5,
     '香りが華やかで、口当たりがまろやか。フルーティーなアロマと上品なスモーキーさが絶妙なバランスを保っている。',
-    NULL, '2026-02-10', NOW(), NOW()
+    NULL, '2026-02-10'::DATE, NOW(), NOW()
 FROM public_user
 UNION ALL
 SELECT
@@ -54,5 +56,5 @@ SELECT
     '獺祭 純米大吟醸',
     9.0,
     'フルーティーで飲みやすい。透明感のある甘みと爽やかな酸味が心地よく、後味がすっきりしている。',
-    NULL, '2026-02-05', NOW(), NOW()
+    NULL, '2026-02-05'::DATE, NOW(), NOW()
 FROM public_user;
